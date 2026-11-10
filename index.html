@@ -1,0 +1,1854 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>申论批改台 · 材料分析与写作训练</title>
+<meta name="description" content="申论材料分析与写作反复训练工具：内置仿真材料与题目，按要点、结构、语言、论证四维自动批改，给出改进建议并同步呈现参考答案。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23B03B2E'/%3E%3Crect x='6' y='6' width='52' height='52' fill='none' stroke='%23FCFCF8' stroke-width='2'/%3E%3Ctext x='32' y='44' font-size='34' font-family='serif' fill='%23FCFCF8' text-anchor='middle'%3E申%3C/text%3E%3C/svg%3E">
+<style>
+/* ===== 设计令牌 ===== */
+:root{
+  --bg:#E6E7E0;
+  --sheet:#FCFCF8;
+  --sheettwo:#F4F5EE;
+  --ink:#1B1F1C;
+  --ink-2:#4A534D;
+  --muted:#717A73;
+  --line:#CDCFC3;
+  --line-soft:#E1E2D8;
+  --seal:#B03B2E;
+  --seal-soft:#F3E4E1;
+  --pine:#2E4B3F;
+  --gold:#A8863D;
+  --sans:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,-apple-system,sans-serif;
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC","SimSun",serif;
+  --mono:"SFMono-Regular",Menlo,Consolas,"Courier New",monospace;
+  --r:2px;
+  --grid:32px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+button,input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--pine)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ===== 顶栏 ===== */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:var(--sheet);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 1px 0 rgba(27,31,28,.04);
+}
+.topbar-in{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px;
+  min-height:56px;
+}
+.brand{display:flex;align-items:center;gap:9px;min-width:0}
+.seal-mark{
+  width:30px;height:30px;flex:none;
+  background:var(--seal);color:#fff;
+  display:grid;place-items:center;
+  font-family:var(--serif);font-size:19px;font-weight:700;
+  position:relative;
+  border-radius:1px;
+}
+.seal-mark::after{content:"";position:absolute;inset:3px;border:1px solid rgba(255,255,255,.55)}
+.brand-txt{min-width:0}
+.brand-title{
+  font-family:var(--serif);font-weight:700;font-size:18px;
+  letter-spacing:.06em;line-height:1.2;white-space:nowrap;
+}
+.brand-sub{
+  display:none;font-size:11.5px;color:var(--muted);letter-spacing:.08em;margin-top:1px;
+}
+.topnav{
+  margin-left:auto;display:flex;align-items:center;gap:2px;
+}
+.navbtn{
+  border:0;background:none;padding:8px 8px;
+  font-size:13.5px;color:var(--ink-2);
+  border-bottom:2px solid transparent;
+  letter-spacing:.02em;
+  min-height:40px;
+}
+.navbtn[aria-current="true"]{color:var(--ink);border-bottom-color:var(--seal);font-weight:600}
+.navbtn:hover{color:var(--seal)}
+.timer{
+  display:none;align-items:center;gap:6px;
+  border:1px solid var(--line);background:var(--sheettwo);
+  padding:4px 8px;border-radius:var(--r);
+  font-family:var(--mono);font-size:12.5px;color:var(--ink-2);
+  white-space:nowrap;
+}
+.timer .dot{width:6px;height:6px;border-radius:50%;background:var(--seal);flex:none}
+.timer.run .dot{animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.btn{
+  border:1px solid var(--line);
+  background:var(--sheet);
+  padding:8px 13px;border-radius:var(--r);
+  font-size:13.5px;color:var(--ink);
+  transition:background .15s,border-color .15s,color .15s;
+  min-height:38px;
+}
+.btn:hover{border-color:var(--pine);color:var(--pine)}
+.btn-primary{
+  background:var(--seal);border-color:var(--seal);color:#fff;
+  font-weight:600;letter-spacing:.04em;
+}
+.btn-primary:hover{background:#96302a;border-color:#96302a;color:#fff}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--muted)}
+.btn-ghost:hover{color:var(--seal);border-color:transparent}
+.btn-sm{padding:5px 10px;font-size:12.5px;min-height:32px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ===== 主体 ===== */
+main{padding:0}
+.view{display:none}
+.view.on{display:block}
+.practice{
+  min-height:calc(100dvh - 56px);
+}
+/* 移动端：材料 / 作答 切换 */
+.mobile-tabs{
+  display:flex;gap:0;background:var(--sheet);
+  border-bottom:1px solid var(--line);
+  position:sticky;top:56px;z-index:30;
+}
+.mtab{
+  flex:1;border:0;background:none;padding:11px 8px;
+  font-size:14px;color:var(--muted);
+  border-bottom:2px solid transparent;
+}
+.mtab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--seal);font-weight:600;background:var(--sheettwo)}
+.pane{display:none}
+.pane.on{display:block}
+
+/* 材料卷面 */
+.paperwrap{background:var(--bg);padding:0 0 8px}
+.papersheet{
+  background:var(--sheet);
+  border-bottom:1px solid var(--line);
+  padding:14px 14px 22px 40px;
+  position:relative;
+  min-height:60vh;
+}
+.papersheet::before{
+  content:"";position:absolute;left:26px;top:0;bottom:0;width:1px;
+  background:repeating-linear-gradient(to bottom,var(--seal) 0 6px,transparent 6px 12px);
+  opacity:.35;
+}
+.paper-head{margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line-soft)}
+.paper-kicker{
+  font-size:11.5px;color:var(--muted);letter-spacing:.14em;margin-bottom:5px;
+}
+.paper-title{
+  font-family:var(--serif);font-size:20px;font-weight:700;line-height:1.45;letter-spacing:.02em;margin:0;
+}
+.paper-meta{font-size:12px;color:var(--muted);margin-top:6px}
+.mat{margin:0 0 20px}
+.mat-head{
+  display:flex;align-items:baseline;gap:8px;margin-bottom:6px;
+}
+.mat-no{
+  font-family:var(--serif);font-size:13px;color:var(--seal);font-weight:700;letter-spacing:.06em;
+  border-bottom:1px solid var(--seal-soft);padding-bottom:1px;
+}
+.mat-title{font-size:13.5px;color:var(--ink-2);font-weight:600}
+.mat-body{
+  font-family:var(--serif);
+  font-size:16.5px;line-height:1.95;
+  color:#222724;
+  text-align:justify;
+  text-justify:inter-ideograph;
+}
+.mat-body p{margin:0 0 .55em;text-indent:2em}
+.mat-body p:last-child{margin-bottom:0}
+
+/* 作答台 */
+.desk{background:var(--bg);padding:12px 12px 20px;display:flex;flex-direction:column;gap:10px}
+.askcard{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:12px 13px}
+.ask-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.tagtype{
+  font-size:11.5px;letter-spacing:.06em;color:var(--pine);
+  border:1px solid #C9D4CB;background:#EFF3ED;
+  padding:1px 6px;border-radius:1px;
+}
+.tagscore{font-family:var(--mono);font-size:12px;color:var(--seal);border:1px solid var(--seal-soft);padding:1px 6px}
+.qno{font-size:12px;color:var(--muted);letter-spacing:.08em}
+.ask-text{font-family:var(--serif);font-size:16px;line-height:1.7;margin:0 0 6px;font-weight:600}
+.ask-req{font-size:12.5px;color:var(--muted);line-height:1.6;margin:0}
+.ask-progress{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--muted)}
+.qdots{display:flex;gap:4px}
+.qdot{width:18px;height:4px;background:var(--line);border:0;padding:0;border-radius:1px}
+.qdot.on{background:var(--seal)}
+.qdot.done{background:var(--pine)}
+.writebox{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;flex:1;min-height:320px}
+.write-bar{
+  display:flex;align-items:center;gap:10px;
+  padding:7px 10px;border-bottom:1px solid var(--line-soft);
+  background:var(--sheettwo);
+}
+.write-bar .lbl{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.count{
+  margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--ink-2);
+  display:flex;align-items:baseline;gap:4px;
+}
+.count b{font-size:17px;font-weight:600;color:var(--ink)}
+.count.over b{color:var(--seal)}
+.count.under b{color:var(--gold)}
+.limit{font-size:11.5px;color:var(--muted)}
+.answer-wrap{position:relative;flex:1;display:flex}
+.answer-input{
+  width:100%;min-height:300px;flex:1;resize:vertical;
+  border:0;outline:none;background:transparent;
+  padding:10px 12px 12px 12px;
+  font-family:var(--serif);font-size:16px;
+  line-height:var(--grid);
+  color:#20261F;
+  background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--grid) - 1px),rgba(46,75,63,.13) calc(var(--grid) - 1px) var(--grid));
+  background-size:100% var(--grid);
+  background-attachment:local;
+}
+.answer-input::placeholder{color:#A9B0A8;font-family:var(--sans);font-size:13.5px}
+.answer-foot{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;
+  border-top:1px solid var(--line-soft);background:var(--sheettwo);
+}
+.hint-inline{font-size:12px;color:var(--muted);line-height:1.5}
+.answer-foot .btn{margin-left:auto}
+.autosave{font-size:11.5px;color:var(--muted);font-family:var(--mono)}
+
+/* 通用页 */
+.page{max-width:1000px;margin:0 auto;padding:16px 13px 60px}
+.page-head{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.page-title{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:.04em;margin:0}
+.page-desc{font-size:12.5px;color:var(--muted);margin:3px 0 0}
+
+/* 批改单 */
+.verdict{
+  background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 14px;position:relative;overflow:hidden;
+  display:grid;grid-template-columns:1fr;gap:14px;
+}
+.scoreblock{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.scorebig{font-family:var(--serif);font-size:56px;line-height:.9;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.scorebig span{font-size:19px;color:var(--muted);font-weight:400;letter-spacing:0;margin-left:2px}
+.level{
+  font-size:12px;letter-spacing:.16em;padding:3px 9px;border:1px solid currentColor;
+  margin-bottom:4px;
+}
+.level.excellent{color:var(--pine)}
+.level.good{color:#5C6B4A}
+.level.pass{color:var(--gold)}
+.level.low{color:var(--seal)}
+.vmeta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+.vtitle{font-family:var(--serif);font-size:15px;line-height:1.6;color:var(--ink-2);margin:0 0 5px}
+.stamp{
+  position:absolute;right:12px;top:12px;
+  width:82px;height:82px;border:2.5px solid var(--seal);
+  color:var(--seal);display:grid;place-items:center;
+  transform:rotate(-9deg);opacity:.92;
+  font-family:var(--serif);
+  pointer-events:none;
+  border-radius:2px;
+  animation:stamp .34s cubic-bezier(.2,.9,.3,1.2) both;
+}
+.stamp::before{content:"";position:absolute;inset:4px;border:1px solid rgba(176,59,46,.6)}
+.stamp b,.stamp i{display:block}
+.stamp b{font-size:26px;letter-spacing:.06em;line-height:1.1}
+.stamp i{font-style:normal;font-size:9px;letter-spacing:.18em;margin-top:3px}
+@keyframes stamp{from{transform:rotate(-9deg) scale(1.35);opacity:0}to{transform:rotate(-9deg) scale(1);opacity:.92}}
+@media (prefers-reduced-motion:reduce){.stamp{animation:none}.timer.run .dot{animation:none}}
+
+.dims{display:grid;grid-template-columns:1fr;gap:9px}
+.dim{display:grid;grid-template-columns:66px 1fr 46px;align-items:center;gap:9px;font-size:12.5px}
+.dim-name{color:var(--ink-2)}
+.dim-track{height:6px;background:var(--line-soft);position:relative;border-radius:1px;overflow:hidden}
+.dim-fill{position:absolute;left:0;top:0;bottom:0;background:var(--pine);width:0;transition:width .5s ease}
+.dim-fill.low{background:var(--seal)}
+.dim-num{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right}
+
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);margin-top:14px}
+.card-head{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--line-soft);background:var(--sheettwo)}
+.card-h{font-family:var(--serif);font-size:15px;font-weight:700;letter-spacing:.06em;margin:0}
+.card-note{margin-left:auto;font-size:11.5px;color:var(--muted)}
+.card-body{padding:13px}
+
+.pt-row{
+  display:grid;grid-template-columns:22px 1fr auto;gap:9px;
+  padding:9px 0;border-bottom:1px dotted var(--line);
+  align-items:start;
+}
+.pt-row:last-child{border-bottom:0}
+.pt-idx{font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:2px}
+.pt-main{min-width:0}
+.pt-label{font-size:13.5px;line-height:1.55;color:var(--ink)}
+.pt-ev{font-size:11.5px;color:var(--muted);margin-top:3px;word-break:break-word}
+.pt-score{font-family:var(--mono);font-size:12px;text-align:right;white-space:nowrap;padding-top:1px}
+.pt-row.hit .pt-score{color:var(--pine)}
+.pt-row.miss .pt-score{color:var(--seal)}
+.state{
+  display:inline-block;font-size:11px;padding:0 5px;border-radius:1px;
+  border:1px solid currentColor;margin-left:4px;
+}
+.state.hit{color:var(--pine);background:#EFF3ED}
+.state.miss{color:var(--seal);background:var(--seal-soft)}
+.state.part{color:var(--gold);background:#F6F0E2}
+
+.advice{list-style:none;margin:0;padding:0;counter-reset:a}
+.advice li{
+  counter-increment:a;display:grid;grid-template-columns:26px 1fr;gap:8px;
+  padding:9px 0;border-bottom:1px dotted var(--line);
+}
+.advice li:last-child{border-bottom:0}
+.advice li::before{
+  content:counter(a,decimal-leading-zero);font-family:var(--mono);font-size:11px;color:var(--seal);
+  padding-top:3px;
+}
+.advice strong{font-weight:600;color:var(--ink)}
+.advice p{margin:2px 0 0;font-size:13.5px;color:var(--ink-2);line-height:1.7}
+.advice .fix{display:block;margin-top:5px;font-size:12.5px;color:var(--pine);background:#F0F3EC;border-left:2px solid var(--pine);padding:6px 9px}
+.advice .method{display:inline-block;font-size:11.5px;color:var(--seal);border:1px solid var(--seal-soft);padding:0 5px;margin-top:5px;background:#FBF1EF}
+
+.refblock{margin:0 0 14px}
+.refblock h4{
+  font-size:13px;margin:0 0 5px;color:var(--ink-2);font-weight:600;letter-spacing:.04em;
+  display:flex;align-items:center;gap:7px;
+}
+.refblock h4::before{content:"";width:3px;height:12px;background:var(--seal)}
+.refbody{
+  font-family:var(--serif);font-size:15.5px;line-height:1.95;text-align:justify;
+  text-indent:2em;color:#232824;
+}
+.refbody p{margin:0 0 .5em;text-indent:2em}
+.refbody .lead{color:var(--pine)}
+.reflist{margin:0;padding-left:1.2em;font-family:var(--serif);font-size:15px;line-height:1.9}
+.reflist li{margin-bottom:4px}
+.refoutline{display:grid;gap:7px;margin-bottom:12px}
+.refoutline .ro{display:grid;grid-template-columns:58px 1fr;gap:9px;font-size:13px;align-items:start}
+.refoutline .ro b{font-family:var(--mono);font-size:11px;color:var(--seal);padding-top:2px;letter-spacing:.04em}
+.refoutline .ro p{margin:0;line-height:1.65;color:var(--ink-2)}
+.standard{
+  font-size:12.5px;color:var(--ink-2);background:var(--sheettwo);
+  border:1px dashed var(--line);padding:9px 11px;line-height:1.7;margin-top:6px;
+}
+.pitfalls{margin:8px 0 0;padding-left:1.1em;font-size:12.5px;color:var(--muted);line-height:1.7}
+
+.notice{
+  font-size:12px;color:var(--muted);line-height:1.65;
+  border-top:1px solid var(--line-soft);padding:10px 13px;
+  background:var(--sheettwo);
+}
+.answer-review{
+  font-family:var(--serif);font-size:14.5px;line-height:1.9;white-space:pre-wrap;
+  background:var(--sheettwo);border:1px solid var(--line-soft);padding:11px;
+  max-height:260px;overflow:auto;text-indent:0;
+}
+.answer-review .mark{background:#F6E3DF;border-bottom:1px solid var(--seal);padding:0 1px}
+
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+
+/* 记录页 */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--sheet);border:1px solid var(--line);padding:11px 10px;border-radius:var(--r)}
+.stat .k{font-size:11.5px;color:var(--muted);letter-spacing:.08em}
+.stat .v{font-family:var(--serif);font-size:26px;font-weight:700;line-height:1.25;margin-top:2px}
+.stat .v small{font-size:12px;color:var(--muted);font-weight:400;font-family:var(--mono)}
+.trendbox{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:12px 10px 6px}
+.trendbox svg{display:block;width:100%;height:auto}
+.log{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);margin-top:12px}
+.logrow{
+  display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;
+  padding:10px 12px;border-bottom:1px solid var(--line-soft);
+}
+.logrow:last-child{border-bottom:0}
+.logrow .t{font-size:13.5px;line-height:1.45}
+.logrow .m{font-size:11.5px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+.logrow .s{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--seal);white-space:nowrap}
+.logrow .s.ok{color:var(--pine)}
+.empty{padding:26px 14px;text-align:center;color:var(--muted);font-size:13px;line-height:1.8}
+.empty strong{display:block;font-family:var(--serif);font-size:16px;color:var(--ink-2);margin-bottom:5px}
+.logbar{height:3px;background:var(--line-soft);margin-top:6px;position:relative}
+.logbar i{position:absolute;left:0;top:0;bottom:0;background:var(--seal);opacity:.7}
+
+/* 方法库 */
+.toolsbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.search{
+  flex:1;min-width:180px;border:1px solid var(--line);background:var(--sheet);
+  padding:8px 10px;border-radius:var(--r);font-size:14px;min-height:40px;
+}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip{
+  border:1px solid var(--line);background:var(--sheet);padding:4px 9px;
+  font-size:12px;border-radius:1px;color:var(--ink-2);min-height:30px;
+}
+.chip[aria-pressed="true"]{background:var(--pine);border-color:var(--pine);color:#fff}
+.mlist{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r)}
+.mrow{display:grid;grid-template-columns:44px 1fr;gap:8px;padding:9px 11px;border-bottom:1px solid var(--line-soft);align-items:start}
+.mrow:last-child{border-bottom:0}
+.mrow .id{font-family:var(--mono);font-size:11px;color:var(--seal);padding-top:2px}
+.mrow .nm{font-size:13.5px;line-height:1.5;color:var(--ink)}
+.mrow .sb{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.04em}
+.mrow .how{font-size:12px;color:var(--pine);margin-top:4px;line-height:1.6;display:none}
+.mrow.open .how{display:block}
+.mrow.open{background:var(--sheettwo)}
+.mcount{font-size:11.5px;color:var(--muted);margin:0 0 8px}
+
+/* 题架抽屉 */
+.scrim{position:fixed;inset:0;background:rgba(20,25,21,.38);z-index:60;opacity:0;pointer-events:none;transition:opacity .18s}
+.scrim.on{opacity:1;pointer-events:auto}
+.shelf{
+  position:fixed;top:0;right:0;bottom:0;width:min(420px,92vw);z-index:61;
+  background:var(--sheet);border-left:1px solid var(--line);
+  transform:translateX(100%);transition:transform .22s ease;
+  display:flex;flex-direction:column;
+}
+.shelf.on{transform:translateX(0)}
+.shelf-head{display:flex;align-items:center;gap:8px;padding:13px 14px;border-bottom:1px solid var(--line)}
+.shelf-head h2{font-family:var(--serif);font-size:17px;margin:0;letter-spacing:.06em}
+.shelf-body{overflow:auto;padding:10px 12px 30px;flex:1}
+.sets{display:grid;gap:8px}
+.setcard{border:1px solid var(--line);background:var(--sheet);border-radius:var(--r)}
+.setcard.on{border-color:var(--pine);background:#F7F8F1}
+.setbtn{
+  width:100%;text-align:left;border:0;background:none;padding:10px 11px;
+  display:grid;grid-template-columns:1fr auto;gap:4px 8px;align-items:center;
+}
+.setbtn .st{font-family:var(--serif);font-size:14.5px;font-weight:600;line-height:1.45}
+.setbtn .sm{font-size:11.5px;color:var(--muted);grid-column:1;letter-spacing:.03em}
+.setbtn .n{font-family:var(--mono);font-size:11px;color:var(--muted);grid-row:1 / span 2;grid-column:2}
+.qlist{display:none;border-top:1px solid var(--line-soft);padding:4px 0}
+.setcard.on .qlist{display:block}
+.qitem{
+  width:100%;text-align:left;border:0;background:none;padding:7px 11px 7px 14px;
+  display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center;
+}
+.qitem:hover{background:var(--sheettwo)}
+.qitem.on{background:#EFF2E9;box-shadow:inset 3px 0 0 var(--seal)}
+.qitem .qt{font-size:12.5px;line-height:1.4}
+.qitem .qs{font-size:11px;color:var(--muted);font-family:var(--mono);grid-row:2;grid-column:1}
+.qitem .qb{font-family:var(--mono);font-size:11px;color:var(--pine);grid-row:1 / span 2;grid-column:2}
+
+@media (min-width:768px){
+  .topbar-in{padding:10px 20px;min-height:64px}
+  .brand-title{font-size:20px}
+  .brand-sub{display:block}
+  .navbtn{padding:9px 14px;font-size:14px}
+  .timer{display:flex}
+  .mobile-tabs{display:none}
+  .practice{
+    display:grid;grid-template-columns:minmax(0,1.18fr) minmax(0,1fr);
+    height:calc(100dvh - 64px);
+    min-height:0;
+    align-items:stretch;
+  }
+  .pane{display:block;min-height:0;overflow:auto}
+  #paneMaterial{border-right:1px solid var(--line)}
+  .paperwrap{padding:0;min-height:100%}
+  .papersheet{border:0;padding:22px 24px 40px 52px;min-height:100%}
+  .papersheet::before{left:32px}
+  .paper-title{font-size:22px}
+  .mat-body{font-size:17px;line-height:1.98}
+  .desk{padding:14px 18px 24px;height:100%;overflow:auto}
+  .writebox{min-height:0}
+  .answer-input{min-height:calc(100dvh - 380px)}
+  .page{padding:26px 24px 80px}
+  .page-title{font-size:26px}
+  .verdict{grid-template-columns:1.15fr .85fr;padding:20px 22px;gap:20px}
+  .scorebig{font-size:64px}
+  .stamp{width:96px;height:96px;right:22px;top:20px}
+  .dims{align-content:start}
+  .stats{grid-template-columns:repeat(3,1fr);gap:12px}
+  .stat{padding:14px}
+  .stat .v{font-size:30px}
+  .card-body{padding:16px}
+  .advice li{grid-template-columns:32px 1fr;padding:11px 0}
+  .mtab{font-size:14px}
+}
+@media (min-width:1100px){
+  .practice{grid-template-columns:minmax(0,1.25fr) minmax(0,.95fr)}
+  .page{max-width:1040px}
+}
+@media print{
+  .topbar,.mobile-tabs,.actionbar,.actions,.shelf,.scrim{display:none!important}
+  body{background:#fff}
+  .card,.verdict{border-color:#bbb;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="seal-mark" aria-hidden="true">申</div>
+      <div class="brand-txt">
+        <div class="brand-title">申论批改台</div>
+        <div class="brand-sub">材料分析 · 归纳概括 · 对策建议 · 大作文</div>
+      </div>
+    </div>
+    <nav class="topnav" aria-label="主导航">
+      <button class="navbtn" data-go="practice" aria-current="true">题架</button>
+      <button class="navbtn" data-go="history">批改记录</button>
+      <button class="navbtn" data-go="methods">方法库</button>
+      <span class="timer" id="timer" title="本题作答用时">
+        <span class="dot"></span><span id="timerText">00:00</span>
+      </span>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- ===== 视图：练习 ===== -->
+  <section class="view on practice" id="view-practice">
+    <div class="mobile-tabs" role="tablist" aria-label="材料与作答">
+      <button class="mtab" role="tab" aria-selected="true" data-pane="material">给定材料</button>
+      <button class="mtab" role="tab" aria-selected="false" data-pane="desk">作答 · <span id="mtabScore"></span></button>
+    </div>
+    <div class="pane on paperwrap" id="paneMaterial">
+      <div class="papersheet" id="papersheet">
+        <!-- 材料由 JS 渲染 -->
+      </div>
+    </div>
+    <div class="pane desk" id="paneDesk">
+      <div class="askcard">
+        <div class="ask-top">
+          <span class="qno" id="qno">第 1 题</span>
+          <span class="tagtype" id="qtype">概括归纳</span>
+          <span class="tagscore" id="qscore">20 分</span>
+        </div>
+        <p class="ask-text" id="qask"></p>
+        <p class="ask-req" id="qreq"></p>
+        <div class="ask-progress">
+          <div class="qdots" id="qdots"></div>
+          <span id="qprogress"></span>
+        </div>
+      </div>
+      <div class="writebox">
+        <div class="write-bar">
+          <span class="lbl">作答区（纸质稿纸版式，自动保存草稿）</span>
+          <span class="limit" id="qlimit"></span>
+        </div>
+        <div class="answer-wrap">
+          <textarea id="answer" class="answer-input" spellcheck="false" aria-label="申论作答区" placeholder="在这里作答。建议先列提纲：总括句 → 分条要点 → 落点，再展开成文。"></textarea>
+        </div>
+        <div class="answer-foot">
+          <span class="count" id="countBox"><b id="wordCount">0</b><span>字（含标点）</span></span>
+          <span class="autosave" id="autosaveTag"></span>
+          <button class="btn btn-primary" id="submitBtn">提交批改</button>
+        </div>
+      </div>
+      <div class="hint-inline">批改规则：按评分要点逐条比对关键词，再检查结构、语言与论证，给出维度得分和改法。答案不联网、不上传。</div>
+    </div>
+  </section>
+
+  <!-- ===== 视图：批改单 ===== -->
+  <section class="view" id="view-result">
+    <div class="page" id="resultPage"><!-- JS 渲染 --></div>
+  </section>
+
+  <!-- ===== 视图：记录 ===== -->
+  <section class="view" id="view-history">
+    <div class="page">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">批改记录</h1>
+          <p class="page-desc">每次提交自动留档，只保存在本机浏览器。可看进步曲线与本机最高分。</p>
+        </div>
+        <button class="btn btn-sm" id="exportBtn" style="margin-left:auto">导出记录 JSON</button>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="trendbox" id="trendbox"></div>
+      <div class="log" id="logList"></div>
+    </div>
+  </section>
+
+  <!-- ===== 视图：方法库 ===== -->
+  <section class="view" id="view-methods">
+    <div class="page">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">方法库</h1>
+          <p class="page-desc">整理自「加夜班的文兄」209 条框架（WX01–WX209）。点条目看一句话用法；写作卡壳时按场景检索。</p>
+        </div>
+      </div>
+      <div class="toolsbar">
+        <input type="search" class="search" id="methodSearch" placeholder="搜编号或关键词，如 开头、豹尾、四个量、WX29">
+      </div>
+      <div class="chips" id="methodCats"></div>
+      <p class="mcount" id="methodCount"></p>
+      <div class="mlist" id="methodList"></div>
+    </div>
+  </section>
+</main>
+
+<!-- 题架抽屉 -->
+<div class="scrim" id="scrim"></div>
+<aside class="shelf" id="shelf" aria-label="题架">
+  <div class="shelf-head">
+    <h2>题架</h2>
+    <span id="setCount" style="font-size:11.5px;color:var(--muted)"></span>
+    <button class="btn btn-sm btn-ghost" id="closeShelf" style="margin-left:auto">关闭</button>
+  </div>
+  <div class="shelf-body">
+    <div class="sets" id="setList"></div>
+  </div>
+</aside>
+
+<script>
+/* ============================================================
+   题库数据
+   材料为仿真命题（依据公开政策方向与常见治理议题编写，非真题原文），
+   用于训练“读材料—找要点—组织答案”的完整动作。
+   ============================================================ */
+const BANK = [
+{
+  id:'s1', name:'城市更新中的“留”与“改”', tag:'城镇建设', level:'常考',
+  intro:'老城区改造、历史街区保护、安置与运营，是近年申论高频命题场景。',
+  materials:[
+    {n:'材料1', t:'城市更新，正在成为许多城市的关键词。过去几十年，城市发展主要靠向外扩张、占地建新区；如今，新增建设用地越来越紧，存量空间怎么用、老城区怎么修，成了绕不开的题。国家层面陆续出台推进城市更新的政策文件，明确要求坚持“留改拆”并举、以保留利用提升为主，防止大拆大建。某市统计，2000年以前建成的住宅小区占全市总量的42%，其中管网老化、停车位不足、电梯缺失的小区超过六成。一位住建部门干部说：“现在是‘存量时代’，城市更新不是要不要做的问题，而是怎么做才不留下新的遗憾。”'},
+    {n:'材料2', t:'A市老城区的骑楼老街，曾是全市最热闹的地方。前些年，一家开发商看中这块地，计划整体拆掉建商业综合体，后因居民反对和文物保护要求暂停。此后，市里改变思路，走“微改造”的路子：不拆一栋骑楼，先把地下管网换掉，把架空线缆入地，给老楼加装电梯，把闲置的旧粮仓改成社区食堂和长者饭堂。改造前，街道办组织了十几场“板凳会”，居民提意见、设计师现场改图，有的居民还自愿让出自家院墙的一角，给巷子腾出消防通道。改造后，老街的游客多了，但问题也跟着来：一间临街铺面的租金从每月3000元涨到8000元，几家开了几十年的小吃店搬走了；施工期间连续几个月尘土飞扬、噪音不断，投诉电话打到了市长热线；还有住户反映，加装电梯的费用分摊谈不拢，一楼住户不愿出钱，工程拖了半年。'},
+    {n:'材料3', t:'B市则走了另一条路。为了打造“城市新名片”，市里把一条有百年历史的老街整体拆除，在原址建起仿古商业街，青砖灰瓦、飞檐翘角，开业时热闹了一阵。三年过去，街面冷清，商铺空置率超过三成，运营方不得不反复降租招商。更麻烦的是安置问题：3000多户居民被安置到城郊的新社区，距老城区15公里，附近没有像样的学校和医院，就业岗位也少。一位老人说：“房子是新了，可我早上想买碗粉，要走四十分钟。”有居民把新社区叫“睡城”——白天没人，晚上开灯。市里后来复盘时承认，当时只算了拆迁和建设的账，没算产业、就业和公共服务的账。'},
+    {n:'材料4', t:'长期研究城市更新的专家认为，城市更新要算好“三本账”：经济账、民生账、文化账。经济账不是简单的土地出让收入，而是更新后产业能不能进来、税收能不能持续；民生账要看居民看病、上学、买菜、停车是不是更方便；文化账则要看历史街区和老字号还在不在。“更新不是推倒重来，而是有机更新。”他说，“‘留’是底线，留住的是城市记忆和人与人之间的关系；‘改’是重点，改的是安全短板和功能缺陷；‘拆’是例外，只在确有安全风险、且没有其他办法时才动。”他同时提醒，微改造也不是“刷墙运动”，如果只做外立面、不做管网和公共服务，过两年还会返工。'},
+    {n:'材料5', t:'在老街住了四十年的陈阿姨说，她不反对改造，就怕“改着改着，把我们改走了”。她希望保留菜市场，把路灯修好，增加几个停车位，“别把老街改成只能拍照、不能过日子的地方”。卖卤味的张师傅则担心，改造后租金上涨、摊位被清，“我们这些小本生意，经不起折腾”。街道干部也有苦衷：一个院子三个产权人，有的单位早就改制找不到人；资金缺口大，专项债申报门槛高、周期长，社会资本又嫌回报慢；居民意见不统一，一户不同意，整栋楼都动不了。“最难的不是画图，是凑钱和凑人。”'}
+  ],
+  questions:[
+    {
+      id:'s1q1', type:'gk', typeName:'概括归纳', score:20, min:170, max:215,
+      ask:'根据给定材料，概括当前城市更新中存在的主要问题。',
+      req:'要求：全面、准确、有条理；不超过200字。',
+      dims:{content:14, structure:3, language:3},
+      points:[
+        {label:'改造方式粗放，大拆大建、拆真建假，损毁历史街区和街巷肌理，新建商业设施空置', w:3, need:1, keys:['大拆大建','拆真建假','推倒重来','整体拆除','损毁历史','街巷肌理','仿古']},
+        {label:'重建设轻运营，安置区远离城区，教育、医疗、就业等配套不足', w:3, need:1, keys:['重建设轻运营','空置率','安置区','配套不足','就业岗位','公共服务','睡城']},
+        {label:'资金投入不足、来源单一，专项债申报难，社会资本参与意愿低', w:2, need:1, keys:['资金缺口','资金不足','专项债','社会资本','融资','回报慢']},
+        {label:'产权关系复杂、权属分散，协调成本高，居民意见难以统一', w:2, need:1, keys:['产权','权属','协调成本','意见不统一','谈不拢','一户不同意']},
+        {label:'改造后租金上涨，老字号和小商户外迁，原住民流失、烟火气减弱', w:2, need:1, keys:['租金上涨','外迁','搬走','烟火气','老字号','小商户','原住民']},
+        {label:'居民参与和诉求回应不足，施工扰民、费用分摊矛盾突出，微改造存在重面子轻里子倾向', w:2, need:1, keys:['参与不足','施工扰民','噪音','费用分摊','重面子','刷墙','投诉']}
+      ],
+      structure:{total:true, items:true},
+      ref:{
+        outline:[
+          {h:'总括', t:'当前城市更新在改造方式、运营配套、资金、产权、民生、参与六方面存在短板。'},
+          {h:'分条', t:'一是改造粗放；二是重建设轻运营；三是资金不足；四是产权复杂；五是租金上涨、原住民外迁；六是参与不足、施工扰民。'}
+        ],
+        full:[
+          '当前城市更新存在六方面问题：一是改造粗放，大拆大建、拆真建假，损毁历史街区和街巷肌理，新建商业设施空置。二是重建设轻运营，安置区远离城区，教育、医疗、就业配套不足。三是资金不足、来源单一，专项债申报难，社会资本参与意愿低。四是产权复杂、权属分散，协调成本高，居民意见难统一。五是租金上涨，老字号和小商户外迁，烟火气流失。六是居民参与不足，施工扰民、费用分摊矛盾突出，微改造存在重面子轻里子倾向。'
+        ],
+        standard:'要点14分（每点2—3分，答出关键词即可给分，同义表述同样得分）；结构3分（有总括句1分、分条作答2分）；语言3分（书面规范、无口语、字数合规）。'
+      },
+      pitfalls:['通篇抄材料原句，只叙述现象不作概括','要点交叉重复，把“资金”和“产权”合成一条导致漏点','不分条、一段到底，阅卷人无法快速踩点'],
+      tips:['WX130','WX42']
+    },
+    {
+      id:'s1q2', type:'zw', typeName:'大作文', score:40, min:980, max:1250,
+      ask:'结合给定材料，以“城市更新中的‘留’与‘改’”为主题，自选角度，自拟题目，写一篇议论文。',
+      req:'要求：观点明确，见解深刻；结构完整，论证充分；联系实际，语言流畅；1000—1200字。',
+      dims:{content:12, structure:10, argument:10, language:6, format:2},
+      points:[
+        {label:'立意：留住城市记忆、历史文脉与人群关系（“留”的价值）', w:4, need:1, keys:['留住记忆','城市记忆','历史文脉','街巷肌理','老字号','烟火气','根脉']},
+        {label:'立意：改出安全底线、功能短板与生活品质（“改”的必要）', w:4, need:1, keys:['安全短板','管网','加装电梯','功能','生活品质','补齐短板','宜居']},
+        {label:'立意：留与改辩证统一，靠机制、资金、群众参与实现', w:4, need:1, keys:['辩证','统一','不是非此即彼','机制','多元投入','共同缔造','三本账']}
+      ],
+      essay:{title:true, intro:true, subs:2, evidence:2, ending:true},
+      ref:{
+        outline:[
+          {h:'开头', t:'由老城的记忆与短板切入，提出“留与改不是非此即彼，而是辩证统一”的中心论点。'},
+          {h:'分论点一', t:'留，留住城市的根脉与人心：用B市“拆真建假、居民远迁”与A市“骑楼不拆、烟火延续”作正反对比。'},
+          {h:'分论点二', t:'改，改出安全底线与生活品质：管网入地、电梯到户、消防通道，反对“刷墙运动”式的假改造。'},
+          {h:'分论点三', t:'留与改的统一靠机制：算好三本账、多元投入、共同缔造，把居民从旁观者变成参与者。'},
+          {h:'结尾', t:'回到“城市是人民的城市”，以留守底线、以改补短板、以机制聚合力收束。'}
+        ],
+        full:[
+          '留得住记忆　改得出新生',
+          '城市更新，一头连着发展，一头连着民生。走在老城里，斑驳的骑楼、狭窄的巷子、楼下的菜市场，是几代人的生活坐标；而老化的管网、缺失的电梯、拥堵的停车，又是绕不开的安全短板。面对这道题，有的地方一拆了之，把老街变成仿古商业街，结果商铺空置、居民远迁；有的地方一留了之，只刷外墙不动里子，过两年又返工。实践反复证明：“留”与“改”不是非此即彼的选择题，而是辩证统一的必答题。留得住记忆，才改得出新生。',
+          '留，留住的是城市的根脉，也是治理的人心。B市的教训值得记取：一条百年老街被整体拆除，原址建起青砖灰瓦的仿古街，开业时热闹了一阵，三年后商铺空置率超过三成；3000多户居民被安置到15公里外的新社区，老人想买碗粉要走四十分钟。拆掉的不只是房子，还有邻里关系、生计网络和“回家的路”。反观A市骑楼老街，不拆一栋楼，先把地下管网换掉、架空线缆入地、老楼加装电梯，再把闲置的旧粮仓改成社区食堂，老街的烟火气才得以延续。所谓“留”，不是把城市封进玻璃柜，而是留住历史街区的肌理、老字号的招牌、菜市场的喧闹，让人们在熟悉的街巷里继续过日子。',
+          '改，改出的是安全底线，也是生活品质。留住不等于不动。A市改造前，架空线缆像蛛网，一下雨就积水，老人爬六楼要歇三次；改造后，管网入地、电梯到户、消防通道打通，这些“看不见的里子”才是更新的硬指标。反之，如果只在临街立面刷漆、挂灯笼，却把背街小巷的积水、飞线、危房留在原地，就是典型的“重面子轻里子”。改，还要改出公平：加装电梯不能只让高层受益、让一楼买单，费用分摊要有协商机制；施工不能长期扰民，要有工期承诺和补偿方案。改得好不好，居民脚下的路、头上的灯、楼下的菜场最清楚。',
+          '留与改的统一，靠的是机制，不是口号。一要算好“三本账”。经济账看产业和税收能否持续，民生账看上学、看病、买菜、停车是否方便，文化账看街区与老字号是否还在；三账不平衡，更新就会走偏。二要回答“钱从哪来”。专项债申报门槛高、周期长，社会资本又嫌回报慢，就要探索“财政补一点、银行贷一点、居民出一点、运营赚一点”的多元投入，把运营前置，先想清楚更新之后靠什么活下去。三要回答“人怎么凑”。一个院子三个产权人、一户不同意整栋楼动不了，就需要“共同缔造”的议事平台，让居民从旁观者变成参与者、从被改造者变成共有人。A市十几场“板凳会”，设计师现场改图，居民让出自家院墙为巷子腾出消防通道，这就是治理能力。',
+          '城市是人民的城市。城市更新改的是空间，暖的是人心，续的是文脉。唯有以“留”守住底线、以“改”补齐短板、以机制凝聚合力，才能让老城在更新中既见历史、又见未来，让每一个住在这里的人，都能在熟悉的街角，过上更好的日子。'
+        ],
+        standard:'立意12分（三类立意关键词各4分，需体现“留”的价值、“改”的必要、二者统一）；结构10分（标题、开头立论、两个以上分论点、结尾升华）；论证10分（材料用例、对比分析、数据或引语、分析而非罗列）；语言6分（书面语、句式有变化、无口语）；规范2分（字数、标题独立成行、无错别字）。'
+      },
+      pitfalls:['只写“要保护”或只写“要改造”，没有辩证关系，立意上限锁死','分论点同义反复，三个段都说“要重视”','大段复述材料，没有自己的分析句'],
+      tips:['WX51','WX104','WX08']
+    }
+  ]
+},
+{
+  id:'s2', name:'基层治理的“小马拉大车”', tag:'基层治理', level:'高频',
+  intro:'权责失衡、减负、数字形式主义，是基层治理题的核心矛盾。',
+  materials:[
+    {n:'材料1', t:'中部某乡镇的一名干部在网上留言：一年收到上级文件1200多份，迎接各类检查60多次，手机里装了5个工作打卡App、加了17个工作群。“白天下村，晚上填表，周末补台账。”他说，镇上在编干部38人，对口上级部门却有30多个，很多事项层层下放，最后都落到乡镇。“上面千条线，下面一根针，针眼就那么小。”'},
+    {n:'材料2', t:'在一些村（社区），村委会门口挂着20多块牌子，从“退役军人服务站”到“未成年人保护工作站”，牌子背后往往没有相应的人员和经费。群众来开证明，从“我妈是我妈”到“我家狗没咬人”，村里都得出章，被戏称为“万能章”。一位村支书说：“不是我们想揽，是上面要求必须挂、必须办。人不增、钱不加，只能一个人干几个人的活。”'},
+    {n:'材料3', t:'某省出台为基层减负的清单：梳理乡镇（街道）权责事项98项，取消不合理下放事项34项；建立事项准入制度，部门向基层派任务须经审批，“谁派活、谁给钱、谁负责”；把分散的多个业务App整合为一个“一张表”系统，一次录入、多方复用。清单实施半年后，乡镇干部平均每周填表时间从11小时降到4小时。'},
+    {n:'材料4', t:'但有的地方，减负减出了新负担。为了“留痕”，基层干部要在三个平台上重复录入同样的数据，因为系统之间不互通；有的部门把“拍照上传”作为工作落实的凭证，干部下村先拍照、后干活；还有的地方把减负本身做成了考核指标，要求报送减负台账、拍摄减负专题片。一位干部苦笑：“以前是纸质台账，现在是数字台账，换了个马甲。”'},
+    {n:'材料5', t:'研究基层治理的专家指出，基层“小马拉大车”，根源在于权责不对等：责任层层下压，权力、编制、经费却没有同步下沉。“减负不是减责任，而是减形式、增实效。”他建议，一方面用清单厘清“该谁干”，另一方面做到“权随责走、费随事转”，让基层有人办事、有钱办事、有权办事。一位在乡镇工作了二十年的老干部说得更直白：“我们最盼的，不是少干活，是少填表、多办事。”'}
+  ],
+  questions:[
+    {
+      id:'s2q1', type:'fx', typeName:'综合分析', score:15, min:220, max:270,
+      ask:'给定材料反映了基层治理中的“小马拉大车”现象。请结合材料，谈谈你对“小马拉大车”的理解。',
+      req:'要求：观点明确，分析透彻，条理清晰；不超过250字。',
+      dims:{content:11, structure:2, language:2},
+      points:[
+        {label:'点明实质：基层承担的责任、任务远超其权力、编制和经费，权责不对等', w:4, need:1, keys:['权责不对等','权责失衡','责任大','权力小','事多人少','层层下压','小马拉大车']},
+        {label:'分析表现：事项层层下放、牌子满天飞、万能章、多头填报、打卡留痕', w:3, need:1, keys:['事项下放','层层下放','牌子','万能章','重复录入','打卡','留痕','台账']},
+        {label:'分析危害：干部精力被形式主义消耗，服务群众时间被挤占，政策落地打折扣', w:2, need:1, keys:['精力','形式主义','挤占','服务群众','落地','获得感','效率']},
+        {label:'指出破解方向：权随责走、费随事转，清单管理、资源下沉、数据整合', w:2, need:1, keys:['权随责走','费随事转','清单','资源下沉','整合','减负','增效']}
+      ],
+      structure:{opinion:true, layers:true},
+      ref:{
+        outline:[
+          {h:'释义', t:'一句话定性：基层的责任、任务远超其权力与资源，是权责失衡的典型表现。'},
+          {h:'表现', t:'事项层层下放、牌子多、万能章、多平台重复填报、以留痕代替落实。'},
+          {h:'危害', t:'干部精力被表格消耗，服务群众的时间被挤占，政策落地打折扣。'},
+          {h:'对策', t:'权随责走、费随事转，清单准入、资源下沉、数据整合，把减负落到增效。'}
+        ],
+        full:[
+          '“小马拉大车”，概括了基层治理中权责失衡的状态。其实质是基层承担的任务和责任，远超其拥有的权力、编制和经费：上面千条线、下面一根针，事项层层下放，权限、人员、经费却没有同步下沉，基层只能靠挂牌子、填表格、打卡留痕应付。其表现是“万能章”“万能表”，是多平台重复录入，以拍照留痕代替落实。其危害在于：干部精力被形式主义消耗，服务群众的时间被挤占，政策落地打折扣。破解之道在于权随责走、费随事转，用清单厘清该谁干，让资源跟着事项走，整合分散系统，使基层有人、有钱、有权办事。'
+        ],
+        standard:'实质4分（点出权责不对等即可）；表现3分；危害3分；对策2分；结构3分（有明确观点句、分层展开、有收束）；语言2分。'
+      },
+      pitfalls:['只解释字面意思，不落到“权责失衡”这个实质','通篇列举现象，没有原因和危害分析','把“减负”简单等同于“少干活”'],
+      tips:['WX25','WX101']
+    },
+    {
+      id:'s2q2', type:'dc', typeName:'对策建议', score:25, min:370, max:430,
+      ask:'结合给定材料，就“为基层减负、让基层有事能办”提出对策建议。',
+      req:'要求：针对性强，切实可行，条理清楚；不超过400字。',
+      dims:{content:15, structure:5, language:5},
+      points:[
+        {label:'建立权责清单和事项准入机制，部门派任务须审批，清理不合理下放事项', w:3, need:1, keys:['权责清单','准入','审批','清理','不合理下放','该谁干']},
+        {label:'推动资源下沉，编制、经费、权限随事下移，落实“费随事转”', w:3, need:1, keys:['资源下沉','编制','经费','费随事转','权限下放','人随事走']},
+        {label:'整合数字平台，清理冗余App和工作群，一次录入、多方共享，取消不必要打卡留痕', w:3, need:1, keys:['整合','平台','App','工作群','一次录入','数据共享','打卡','留痕']},
+        {label:'规范督查考核，统筹检查事项、合并考核指标，以群众满意度为主要标准', w:3, need:1, keys:['督查','考核','检查','合并','群众满意度','指标']},
+        {label:'强化保障监督，设减负监测点、畅通反映渠道、对反弹问责，同时落实基层干部待遇', w:3, need:1, keys:['监测','反映渠道','问责','反弹','待遇','关心']}
+      ],
+      structure:{items:true, subjects:true, verbs:true},
+      ref:{
+        outline:[
+          {h:'一', t:'清单准入：厘清权责、审批派活、清理不合理下放。'},
+          {h:'二', t:'资源下沉：编制经费随事转，让人、钱、权跟着事项走。'},
+          {h:'三', t:'数字整合：一个平台、一次录入、多方共享，砍掉留痕式打卡。'},
+          {h:'四', t:'考核规范：统筹检查、合并指标，以群众满意度论英雄。'},
+          {h:'五', t:'保障监督：设监测点、畅通渠道、对反弹问责，同步落实待遇。'}
+        ],
+        full:[
+          '一是建立权责清单和事项准入机制。梳理基层权责事项，明确“该谁干”；部门向基层派任务须经审批，落实“谁派活、谁给钱、谁负责”，坚决清理不合理下放事项，让基层不再“接不住的活也得接”。',
+          '二是推动资源下沉。编制、经费、权限随事项同步下移，落实“费随事转”，配强基层工作力量，让基层有人办事、有钱办事、有权办事，改变“人少事多”的困局。',
+          '三是整合数字平台。清理冗余App和工作群，建设统一的基层数据系统，一次录入、多方共享；取消不必要的打卡、拍照留痕，防止“数字减负”变成“数字负担”。',
+          '四是规范督查考核。统筹安排检查事项，合并考核指标，减少材料报表；把群众满意度、问题解决率作为主要评价标准，不以台账厚度、留痕多少论落实。',
+          '五是强化保障监督。设立减负监测点，畅通基层反映渠道，对负担反弹问题追责问责；同步落实基层干部待遇和轮休，关心其身心健康，让减负可持续。'
+        ],
+        standard:'内容15分（五条对策各3分，答出“做法+目的”即可给分）；结构5分（分条、有主体或手段、动词开头）；语言5分。'
+      },
+      pitfalls:['只喊“要减负”不写具体做法，缺少可执行动作','五条对策其实是同一件事换了说法','忽略“资源下沉”，只谈“少派活”'],
+      tips:['WX44','WX141','WX142']
+    }
+  ]
+},
+{
+  id:'s3', name:'“办不成事”窗口与政务服务', tag:'政务服务', level:'应用文',
+  intro:'短评写作：给定标题、500字，考的是观点、分析与语言的密度。',
+  materials:[
+    {n:'材料1', t:'某市政务服务中心设了一个“办不成事”反映窗口，专门受理那些“按常规流程办不下来”的事。一位老人办理不动产继承，因为早年档案缺失、亲属关系证明开不出来，前后跑了三趟。窗口人员没有把他推回原窗口，而是帮他梳理材料清单，协调公证处和档案部门，五天办结。老人送来一面锦旗，上面写着“办不成事窗口，办成了事”。'},
+    {n:'材料2', t:'该市“一网通办”可办事项占比已达92%，但“二次跑”“多次跑”仍然不少。一家企业办理施工许可，同一套材料在立项、规划、施工三个环节各交了一次；有的事项在线上填完，到窗口还要重新录入，因为“系统里查不到”。一位工作人员坦言，部门之间的数据像一个个“孤岛”，接口不通、标准不一，“我们也不想让群众重复交，可系统不认”。'},
+    {n:'材料3', t:'数字政务在方便多数人的同时，也让一部分人犯了难。有老人不会用手机预约，到了大厅被告知“今天号满了，明天手机上抢”；有的表单字号太小，看不清；有的窗口只留一个“扫码办理”的牌子。一位社区工作者说，她每周都要帮十几位老人代操作，“不是他们不想学，是有些设计压根没考虑他们”。'},
+    {n:'材料4', t:'跨省通办也在推进。异地就医备案、户口迁移等事项，过去要回原籍办，现在在居住地就能提交。但实际体验并不整齐：有的地方“能办但不通”，材料在两地之间来回寄；有的窗口人员不熟悉异地政策，只能让群众“先回去等通知”。'},
+    {n:'材料5', t:'窗口人员也有苦衷。一位前台工作人员说，很多事项授权不足，“大事不敢定、小事层层请示”，群众等得着急；新政策更新快，培训跟不上，“群众问起来，我们心里也没底”。一家企业负责人则说：“我们不指望一次都不跑，只希望能少跑一趟、少交一份材料、少等几天。”'}
+  ],
+  questions:[
+    {
+      id:'s3q1', type:'dp', typeName:'短评写作', score:25, min:470, max:530,
+      ask:'请以“小窗口”撬动“大服务”为题，写一篇短评。',
+      req:'要求：观点鲜明，分析深入，语言流畅；500字左右。',
+      dims:{content:12, structure:5, language:5, format:3},
+      points:[
+        {label:'点明窗口的意义：兜底受理、首问负责，给群众“有人管”的确定性', w:3, need:1, keys:['兜底','有人管','首问','确定性','最后一公里','暖心']},
+        {label:'分析“办不成”的根源：数据壁垒、授权不足、标准不一、能力跟不上', w:4, need:2, keys:['数据壁垒','孤岛','不共享','授权不足','不敢办','标准不一','不会办','培训']},
+        {label:'提出对策：给权、通数据、提能力、建闭环，把个案变成流程优化', w:3, need:2, keys:['授权','给权','数据共享','打通','培训','闭环','流程优化','清单']},
+        {label:'升华：窗口照见作风，服务型政府要把群众的“办不成”当成“必须办”', w:2, need:1, keys:['作风','服务型政府','用户思维','以人民为中心','必须办']}
+      ],
+      structure:{title:true, paras:3, argument:true},
+      ref:{
+        outline:[
+          {h:'由头', t:'用“跑三趟”到“五天办结”的案例切入，点出窗口的价值。'},
+          {h:'剖析', t:'追问“为什么办不成”：数据孤岛、授权不足、标准不一、能力不足。'},
+          {h:'对策', t:'给权、通数据、提能力、建闭环，让“特事特办”变成“事事好办”。'},
+          {h:'收束', t:'窗口虽小，照见作风；把“办不成”当“必须办”。'}
+        ],
+        full:[
+          '“小窗口”撬动“大服务”',
+          '一个“办不成事”窗口，专治“疑难杂症”。一位老人办理不动产继承，因档案缺失、证明难开，跑了三趟没办成；窗口人员帮他梳理材料、协调公证和档案部门，五天办结。窗口不大，却让群众看到了“有人管”的确定性——这正是它最朴素的价值。',
+          '但追问一句：为什么会有“办不成”？表面是流程繁琐，深层是三重堵点。一是数据壁垒。92%的“一网通办”率背后，仍有“系统里查不到”的二次跑，同一套材料在三个环节各交一次，说明部门数据还是“孤岛”。二是授权不足。窗口人员“不敢办”，大事小事层层请示，群众只能干等。三是能力与标准跟不上。政策更新快、培训跟不上，异地政策不熟悉，群众问起来“心里没底”。',
+          '小窗口要撬动大服务，不能只靠“特事特办”式的个案突破。一要给权，明确首问负责和兜底授权，让窗口能定事；二要通数据，统一标准、打通接口，让材料一次提交、多方复用；三要提能力，把政策培训做到窗口，让前台敢答、能答；四要建闭环，把“办不成”的个案汇总成问题清单，倒逼流程再造。个案解决得再多，也不如把产生个案的土壤改掉。',
+          '窗口虽小，照见的是作风。把群众的“办不成”当成自己的“必须办”，把“能不能办”换成“怎样才能办”，服务型政府才不是一句口号。'
+        ],
+        standard:'内容12分（意义3分、根源4分、对策3分、升华2分，根源需答出两个以上）；结构5分（标题、由头、分层分析、收束）；语言5分（短句有力、无口语、无堆砌）；格式3分（标题独立、500字左右、段落分明）。'
+      },
+      pitfalls:['写成工作总结，罗列成绩，缺少“为什么”的分析','对策空泛，“加强领导、提高认识”式套话','超过600字，短评写成评论员文章'],
+      tips:['WX140','WX180']
+    }
+  ]
+},
+{
+  id:'s4', name:'土特产里的乡村产业', tag:'乡村振兴', level:'高频',
+  intro:'“土特产”三字是近年高频命题切口，兼顾概括做法与产业作文。',
+  materials:[
+    {n:'材料1', t:'某县种脐橙已有三十多年，种植面积20万亩，年产量30万吨，是当地最大的富民产业。但县农业局的一份调研报告显示，全县脐橙平均地头收购价只有1.2元一斤，而在电商平台上，同样品质的果子能卖到8元一斤。“丰产不丰收”，报告用了这四个字。原因并不复杂：八成以上是散户种植，采摘不分级、大小一起装筐；没有冷链，旺季集中上市，果贩压价；品牌更是谈不上，外地客商收走后贴上自己的牌子。'},
+    {n:'材料2', t:'转机出现在三年前。县里引进一家果业龙头企业，建起智能分选线，按糖度、果径、外观自动分级，一级果做礼盒、二级果进商超、三级果走加工；牵头成立合作社，统一农资、统一技术规程，谁不按标准种，收购时降级；注册区域公用品牌，包装上印产地溯源码；企业与合作社、农户签订订单，保底收购，行情好时二次分红。县里还组织返乡青年做直播，一场直播卖出3万单。'},
+    {n:'材料3', t:'问题并没有就此消失。周边两个县看到脐橙赚钱，也跟着大面积种植，品种、上市时间几乎一样，收购商开始压价；冷链仓储能力不足，旺季果子堆在田间地头，一场雨就烂掉一批；全县做电商运营的年轻人不到50个，主播一走，账号就停更；更关键的是，企业、合作社与农户之间的利益联结还不紧，不少农户只拿到土地租金和务工收入，产业增值的收益分不到自己头上。'},
+    {n:'材料4', t:'省社科院一位研究员认为，做好“土特产”文章，关键在三个字：土、特、产。“土”是立足本地资源，不能看别人种什么就种什么；“特”是做出辨识度，靠品种、品质、品牌，也靠文化故事；“产”是把链条做长，分选、加工、冷链、物流、销售一个都不能少。他特别提醒，要防止“样样有、样样不精”，一个县能做好一两个主导产业就不错了。'},
+    {n:'材料5', t:'返乡创业的小周说，直播看着热闹，账并不好算：物流成本占到售价的两成，退货率15%，一场卖3万单，真正赚钱的是平台和快递。“我们缺的不是热情，是冷库、是分拣中心、是能长期干下去的人。”村支书则盼着，企业不要把风险都压给农户，“订单合同里，能不能写清楚保底价和分红比例？”'}
+  ],
+  questions:[
+    {
+      id:'s4q1', type:'gk', typeName:'概括归纳', score:20, min:220, max:270,
+      ask:'根据给定材料，概括该县推动脐橙产业发展的主要做法。',
+      req:'要求：全面、准确、有条理；不超过250字。',
+      dims:{content:14, structure:3, language:3},
+      points:[
+        {label:'引进龙头企业，建设智能分选线，按糖度、果径分级，实现优质优价', w:3, need:1, keys:['龙头企业','智能分选','分选线','分级','糖度','果径','优质优价']},
+        {label:'成立合作社，统一农资和技术规程，以标准约束种植', w:3, need:1, keys:['合作社','统一农资','统一技术','技术规程','标准','按标准']},
+        {label:'注册区域公用品牌，使用溯源码，提升产品辨识度', w:3, need:1, keys:['区域公用品牌','公用品牌','品牌','溯源码','包装']},
+        {label:'企业、合作社与农户签订订单，保底收购、二次分红，稳定利益联结', w:3, need:1, keys:['订单','保底收购','二次分红','利益联结','分红','签订']},
+        {label:'组织返乡青年开展直播电商，拓宽销售渠道', w:2, need:1, keys:['直播','电商','返乡青年','线上销售','带货']}
+      ],
+      structure:{total:true, items:true},
+      ref:{
+        outline:[
+          {h:'总括', t:'该县以龙头企业为牵引，从分级、标准、品牌、订单、渠道五方面推动产业升级。'},
+          {h:'分条', t:'引龙头建分选线；合作社统标准；创区域公用品牌；订单保底分红；直播拓渠道。'}
+        ],
+        full:[
+          '该县推动脐橙产业发展主要有五方面做法：一是引进果业龙头企业，建设智能分选线，按糖度、果径、外观自动分级，一级果做礼盒、二级果进商超、三级果走加工，实现优质优价。二是牵头成立合作社，统一农资、统一技术规程，对不按标准种植的农户收购时降级，以标准约束种植。三是注册区域公用品牌，在包装上加印产地溯源码，提升产品辨识度和信誉。四是企业与合作社、农户签订订单，保底收购、行情好时二次分红，稳定利益联结。五是组织返乡青年开展直播电商，一场卖出3万单，拓宽销售渠道。'
+        ],
+        standard:'要点14分（前四点各3分、第五点2分，答出关键词即可）；结构3分（总括句1分、分条2分）；语言3分。'
+      },
+      pitfalls:['把“问题”写进做法里，如“冷链不足”不是做法','漏掉“订单+分红”这一条，而这正是联农带农的关键','只写“引进企业”，不写企业具体做了什么'],
+      tips:['WX130','WX132']
+    },
+    {
+      id:'s4q2', type:'zw', typeName:'大作文', score:40, min:980, max:1250,
+      ask:'结合给定材料，以“土特产里的大文章”为主题，自选角度，自拟题目，写一篇议论文。',
+      req:'要求：观点明确，见解深刻；结构完整，论证充分；联系实际，语言流畅；1000—1200字。',
+      dims:{content:12, structure:10, argument:10, language:6, format:2},
+      points:[
+        {label:'立意：立足本地禀赋做“土”的文章，避免同质化跟风', w:4, need:1, keys:['立足','禀赋','本地资源','因地制宜','同质化','跟风','一县一业']},
+        {label:'立意：以品种、品质、品牌做出“特”的辨识度', w:4, need:1, keys:['辨识度','品质','品牌','品种','标准','文化']},
+        {label:'立意：延长链条、联农带农，把“产”做成体系', w:4, need:1, keys:['链条','冷链','加工','联农带农','利益联结','分红','物流']}
+      ],
+      essay:{title:true, intro:true, subs:2, evidence:2, ending:true},
+      ref:{
+        outline:[
+          {h:'开头', t:'由“1.2元与8元”的价差切入，提出土特产里藏着产业升级的大文章。'},
+          {h:'分论点一', t:'做足“土”的文章：立足禀赋、一县一业，避免跟风同质化。'},
+          {h:'分论点二', t:'做深“特”的文章：分级分选、区域品牌、标准与文化，做出辨识度。'},
+          {h:'分论点三', t:'做强“产”的文章：冷链、加工、电商、联农带农，把链条做成体系。'},
+          {h:'结尾', t:'三方各归其位，让土特产成为乡村振兴的金名片。'}
+        ],
+        full:[
+          '把“土特产”做出大文章',
+          '一颗脐橙，地头收购价1.2元，电商平台卖到8元。同一颗果子，价差近七倍，差的不只是渠道，更是分选、品牌、冷链和组织方式。某县20万亩脐橙“丰产不丰收”的困境说明：土特产不是“土”在资源，而是“土”在链条。把“土、特、产”三个字做实，小果子也能做出大文章。',
+          '做足“土”的文章，把禀赋变成资源。“土”不是落后，是别人复制不了的产地、气候、品种和手艺。某县种了三十多年脐橙，这是根基；但周边两个县看到赚钱就跟着大面积种植，品种、上市时间几乎一样，收购商立刻压价。守着好资源却卖不出好价钱，问题不在“土”，而在没有把“土”变成别人认得出的东西。这提醒我们：因地制宜不是一句空话，看别人种什么就种什么，最后只能是同质化竞争、互相杀价。一个县能做好一两个主导产业就不错了，与其“样样有、样样不精”，不如守住自己的“一亩三分地”，把优势做透。',
+          '做深“特”的文章，把产品做出辨识度。“特”靠三条：品种、品质、品牌。某县引进龙头企业建智能分选线，按糖度、果径、外观自动分级，一级果做礼盒、二级果进商超、三级果走加工，这就是用标准把“好果子”和“普通果子”分开，让优质优价成为可能；合作社统一农资、统一技术规程，谁不按标准种，收购时降级，这是用组织把标准落到田间；注册区域公用品牌、包装加印溯源码，这是用信用把产地变成背书。三步走下来，同一颗果子才有了议价权。',
+          '做强“产”的文章，把链条做成体系。农业的利润，往往不在种，而在种之后。冷链跟不上，旺季果子堆在田间，一场雨烂掉一批；分拣中心缺位，好果坏果一筐装；电商看着热闹，物流成本占售价两成、退货率15%，赚的钱给了平台和快递。所以，“产”的文章要做长：前端有标准化种植，中端有分选、加工、冷链、仓储，后端有品牌、渠道、直播。更重要的是联农带农——企业、合作社与农户签订订单，保底收购、二次分红，让农户不只拿租金和务工费，还能分享增值收益。产业强不强，最终要看农民的钱袋子鼓不鼓。',
+          '土特产里的大文章，不是农民一家能写完的。政府要补短板，把冷库、道路、分拣中心建起来，把人才引回来；企业要做龙头，把标准、品牌、渠道做扎实，不把风险都压给农户；农户要进链条，用合作社、入股、订单把分散的力量组织起来。三方各归其位、各尽其力，土特产才不会止步于“土”，而能成为乡村振兴的金名片。',
+          '把土特产做出大文章，最终要看三个变化：农民的腰包更鼓、产业的根基更稳、乡村的人气更旺。腰包鼓不鼓，看农户能不能分享加工、流通环节的增值收益；根基稳不稳，看冷链、加工、品牌这些“重资产”有没有沉下来；人气旺不旺，看年轻人愿不愿意回来、留不留得住。这三个变化，才是检验这篇大文章写得好不好的标准。'
+        ],
+        standard:'立意12分（土、特、产三类关键词各4分）；结构10分；论证10分（材料用例、数据对比、分层分析）；语言6分；规范2分。'
+      },
+      pitfalls:['三个分论点写成“要重视、要投入、要加强”','通篇写政策，不落到具体产业动作','只写产业不讲农民，丢掉联农带农的落点'],
+      tips:['WX104','WX137','WX16']
+    }
+  ]
+},
+{
+  id:'s5', name:'传统产业数字化转型', tag:'产业经济', level:'常考',
+  intro:'“不敢转、不会转、转不起”是标准命题框架，考原因分析与对策。',
+  materials:[
+    {n:'材料1', t:'东部某市一家纺织企业，2019年上线生产执行系统，把纺纱、织造、染整各环节的设备数据打通。三年后，企业交付周期缩短20%，库存下降15%，次品率降低3个百分点。企业负责人说，改造前最怕的是“订单来了排不出、排了产不出来”，现在接单前就能看到每台设备的产能和交期，“心里有数，敢接大单了”。'},
+    {n:'材料2', t:'但这样的企业在当地仍是少数。市工信局调研了200家中小企业，超过六成处于“单机自动化、整体未联网”的状态。企业主的顾虑很集中：一是“不敢转”，一套系统动辄几十万，加上停产调试的损失，万一打了水漂谁负责；二是“不会转”，厂里没有一个懂数据和工艺的复合型人才，服务商讲的东西听不懂；三是“转不起”，中小企业利润薄、融资难，前期投入大、回报周期长，账算不过来。'},
+    {n:'材料3', t:'服务商这边也有问题。有企业反映，服务商拿来的方案是“大企业模板”，流程复杂、字段繁多，小厂根本用不上；有的系统装上了，设备接口不开放，数据采不上来，最后成了“摆设”。一家服务商坦言，做中小企业项目“单子小、周期长、回款慢”，不如做大企业省心。'},
+    {n:'材料4', t:'市里开始想办法：对技改项目给予设备投资补贴，把门槛从500万元降到100万元；组建数字化转型促进中心，为企业提供免费诊断，“先看病灶再开药”；依托工业互联网平台，推出按需付费的轻量化应用；还搞了“揭榜挂帅”，把行业共性难题张榜，谁解决了给谁奖励。半年下来，完成诊断的企业有120家，但真正上系统的只有30多家。'},
+    {n:'材料5', t:'专家提醒，数字化转型是“一把手工程”，不是买几套软件就完事。企业要先算账：转什么、怎么转、多久能回本，从最痛的场景切入，小步快跑，别一上来就追求“全流程、全覆盖”。政府也要避免“一刀切”，不同行业、不同规模的企业，路径不一样。'}
+  ],
+  questions:[
+    {
+      id:'s5q1', type:'fx', typeName:'原因分析', score:20, min:240, max:300,
+      ask:'结合给定材料，分析中小企业数字化转型中“不敢转、不会转、转不起”的原因。',
+      req:'要求：分析全面，条理清晰；不超过300字。',
+      dims:{content:14, structure:3, language:3}, layerReq:['cause','effect'],
+      points:[
+        {label:'不敢转：投入大、试错成本高、回报周期长，企业怕打水漂、怕担责', w:4, need:1, keys:['投入大','试错','打水漂','回报周期','风险','停产','损失','不敢']},
+        {label:'不会转：缺复合型人才，服务商方案照搬大企业模板，水土不服', w:4, need:1, keys:['人才','复合型','服务商','模板','水土不服','听不懂','不会']},
+        {label:'转不起：中小企业利润薄、融资难，前期投入与停产损失难以承受', w:3, need:1, keys:['利润薄','融资','资金','成本','转不起','负担']},
+        {label:'基础薄弱：设备接口不开放、数据采不上来，形成数据孤岛', w:3, need:1, keys:['接口','数据孤岛','采不上','联网','设备','标准']}
+      ],
+      structure:{layers:true, items:true},
+      ref:{
+        outline:[
+          {h:'总起', t:'“三不”背后是风险、能力、资金、基础四重约束。'},
+          {h:'不敢', t:'投入大、停产损失、回报周期长，试错成本无人兜底。'},
+          {h:'不会', t:'缺复合型人才，服务商方案“大企业模板”水土不服。'},
+          {h:'转不起', t:'利润薄、融资难，前期投入与回报不匹配。'},
+          {h:'基础', t:'设备接口不开放、数据采不上，改造难度被放大。'}
+        ],
+        full:[
+          '中小企业数字化转型的“三不”，表面是意愿问题，深层是四重约束叠加。一是风险约束，导致“不敢转”。一套系统动辄几十万元，加上停产调试的损失，回报周期又长，一旦失败无人兜底，企业主自然不敢拿身家去赌。二是能力约束，导致“不会转”。厂里缺少既懂工艺又懂数据的复合型人才，服务商拿来的多是“大企业模板”，流程复杂、字段繁多，小厂用不上，听着也听不懂。三是资金约束，导致“转不起”。中小企业利润薄、融资难，前期投入与回报周期不匹配，账算不过来。四是基础约束，导致“转了也白转”。设备接口不开放、数据采不上来，系统装上也成“摆设”，进一步抬高了改造门槛。'
+        ],
+        standard:'内容14分（四类原因各3—4分）；结构3分（分类作答、层次清楚）；语言3分。'
+      },
+      pitfalls:['把“三不”抄一遍当原因，没有往下挖一层','四条原因互相交叉，风险与资金重复计分','忽略“设备接口/数据孤岛”这一基础性原因'],
+      tips:['WX115','WX58']
+    },
+    {
+      id:'s5q2', type:'dc', typeName:'对策建议', score:20, min:330, max:380,
+      ask:'结合给定材料，就推进中小企业数字化转型提出对策建议。',
+      req:'要求：针对性强，切实可行，分条作答；不超过350字。',
+      dims:{content:12, structure:4, language:4},
+      points:[
+        {label:'政府侧：免费诊断、技改补贴降门槛、分类施策，避免“一刀切”', w:3, need:1, keys:['诊断','补贴','门槛','分类','一刀切','技改']},
+        {label:'服务侧：开发轻量化、场景化方案，先试点后推广，按需付费', w:3, need:1, keys:['轻量化','场景','试点','按需付费','方案','服务商']},
+        {label:'人才侧：校企合作、数字技能培训，培育复合型人才和数字工匠', w:2, need:1, keys:['人才','培训','校企','数字工匠','复合型']},
+        {label:'企业侧：一把手工程，先算账、从痛点场景切入，小步快跑', w:2, need:1, keys:['一把手','算账','痛点','小步快跑','场景切入']},
+        {label:'生态侧：统一数据标准和接口，依托工业互联网平台共享能力', w:2, need:1, keys:['标准','接口','工业互联网','平台','共享','数据']}
+      ],
+      structure:{items:true, subjects:true, verbs:true},
+      ref:{
+        outline:[
+          {h:'一', t:'政府精准施策：免费诊断、补贴降门槛、分行业分类推进。'},
+          {h:'二', t:'服务商供给适配：轻量化、场景化、可试点、按需付费。'},
+          {h:'三', t:'人才补短：校企合作、数字技能培训。'},
+          {h:'四', t:'企业主动：一把手工程、先算账、从痛点切入。'},
+          {h:'五', t:'生态支撑：统一标准接口、平台共享。'}
+        ],
+        full:[
+          '一是政府精准施策。为中小企业提供免费诊断，“先看病灶再开药”；降低技改补贴门槛，把设备投资补贴扩大到中小项目；分行业、分规模制定转型路径，避免“一刀切”，让企业敢迈第一步。',
+          '二是优化服务供给。引导服务商开发轻量化、场景化的应用，先在小范围试点、再逐步推广；推行按需付费、按效果付费，减少企业一次性投入压力。',
+          '三是补齐人才短板。推动校企合作定向培养，开展数字技能培训，培育既懂工艺又懂数据的复合型人才和“数字工匠”，让企业自己有人能转。',
+          '四是激发企业内力。把数字化转型作为“一把手工程”，先算清投入产出账，从交付、库存、质量等最痛场景切入，小步快跑、迭代推进。',
+          '五是夯实生态基础。统一设备接口和数据标准，依托工业互联网平台共享算力、模型和服务，破解“数据孤岛”，降低单个企业的改造难度。'
+        ],
+        standard:'内容12分（五条各2—3分）；结构4分（分条、有主体意识、动词开头）；语言4分。'
+      },
+      pitfalls:['只写“政府加大支持”，没有企业、服务商、平台的分工','对策与原因不一一对应，出现“答非所问”','补贴、诊断重复写成两条'],
+      tips:['WX141','WX143','WX98']
+    }
+  ]
+}
+/*SETS_PART2*/
+];
+</script>
+<script>
+/* ============================================================
+   方法库数据（207 条，来自附件 methods-map.md）
+   ============================================================ */
+const METHODS = [
+{id:"WX08",name:"开头段\"4步法\"：下定义→重要性→过渡句→扣热点",sub:"开头写法",cat:"写作方法论"},
+{id:"WX09",name:"\"1拖4\"句子结构：观点句/做法句+三个思路句+目的句",sub:"句子结构",cat:"写作方法论"},
+{id:"WX13",name:"\"怎么看+怎么办\"两模型七维度破务虚题",sub:"思维模型",cat:"写作方法论"},
+{id:"WX16",name:"数字思维六招：三比、二改、一形（观点统率数据）",sub:"数据运用",cat:"写作方法论"},
+{id:"WX18",name:"想清楚三大思考模型：手表（历史思维）/钟摆（正反合）/放大镜（维度放大）",sub:"思考模型",cat:"写作方法论"},
+{id:"WX24",name:"\"一收二扬\"豹尾四步法",sub:"结尾写法",cat:"写作方法论"},
+{id:"WX29",name:"\"6 个看\"写\"重要意义\"篇（必然要求/实际举措/应有之义/迫切需要/重要法宝/必由之路）",sub:"重要意义",cat:"写作方法论"},
+{id:"WX30",name:"\"四个干+四个要\"写\"工作要求\"（事的角度+人的角度）",sub:"工作要求",cat:"写作方法论"},
+{id:"WX31",name:"\"4 个点+4 个看\"写\"形势分析\"",sub:"形势分析",cat:"写作方法论"},
+{id:"WX32",name:"\"履职尽责\"四步框架：知责→担责→履责→尽责",sub:"履职尽责",cat:"写作方法论"},
+{id:"WX33",name:"\"系统观念\"三关键字：远（前瞻）/高（全局）/全（整体）",sub:"系统观念",cat:"写作方法论"},
+{id:"WX34",name:"\"下一步工作打算\"四行动框架",sub:"下步打算",cat:"写作方法论"},
+{id:"WX35",name:"\"2 论 3 步\"写\"辩证思维\"：观点定调+两点论+重点论",sub:"辩证思维",cat:"写作方法论"},
+{id:"WX36",name:"\"经验启示\"三式：5 个最+5 个必+4 个靠",sub:"经验启示",cat:"写作方法论"},
+{id:"WX39",name:"\"成就+问题+关键字举措\"策论三段式",sub:"策论举措",cat:"写作方法论"},
+{id:"WX46",name:"\"提振消费\"对策：2W+三个聚焦（能/愿/敢消费）",sub:"提振消费",cat:"写作方法论"},
+{id:"WX51",name:"\"A 与 B\"辩证论述万能语段四层法",sub:"辩证论述",cat:"写作方法论"},
+{id:"WX52",name:"\"实干担当\"人+劲+法三角度",sub:"实干担当",cat:"写作方法论"},
+{id:"WX53",name:"比喻论述两式：\"绣花\"与\"滴灌\"",sub:"比喻论述",cat:"写作方法论"},
+{id:"WX54",name:"\"乡村产业振兴\"框架：主线（小散弱→特融强）+2 大步 6 小点",sub:"乡村产业",cat:"写作方法论"},
+{id:"WX56",name:"\"行政执法类\"3 万能举措（转变理念/优化方式/加强治理）",sub:"行政执法",cat:"写作方法论"},
+{id:"WX57",name:"\"工作谋划\"5 个深入方法论（对标/扬补/前瞻/集成/实效）",sub:"工作谋划",cat:"写作方法论"},
+{id:"WX63",name:"\"构建机制\"4 思路+模板（时间流程/工作环节/协同联动/压实责任）",sub:"机制建设",cat:"写作方法论"},
+{id:"WX64",name:"\"5 个强化\"笔面一体框架（意识/抓手/体系/场景/保障）",sub:"万能框架",cat:"写作方法论"},
+{id:"WX65",name:"\"5 个并重\"行政执法框架（预防监管/执法服务/力度温度/公平效率/主导协同）",sub:"行政执法",cat:"写作方法论"},
+{id:"WX66",name:"\"见解深刻\"3 切入思路（关键七三开/抓住变量/群众思维）",sub:"见解深刻",cat:"写作方法论"},
+{id:"WX67",name:"\"A+B 式辩证结尾\"4 句万能模板",sub:"辩证结尾",cat:"写作方法论"},
+{id:"WX68",name:"\"为民服务\"四字箴言：真·情·实·意",sub:"为民服务",cat:"写作方法论"},
+{id:"WX70",name:"\"四个千\"基层治理框架（走进千家/倾听千言/汇聚千计/理顺千绪）",sub:"基层治理",cat:"写作方法论"},
+{id:"WX71",name:"论述\"人工智能\"三个升华",sub:"人工智能",cat:"写作方法论"},
+{id:"WX72",name:"\"分领域→要素式\"：思考力的关键一跃",sub:"要素思维",cat:"写作方法论"},
+{id:"WX73",name:"历史主动精神\"3 个变\"（识变/应变/求变）",sub:"主动精神",cat:"写作方法论"},
+{id:"WX74",name:"比喻论证三法：算账（气候候鸟）/镜片（望远显微放大）/做菜（吹糠见米刀下见菜文火慢炖）",sub:"比喻论证",cat:"写作方法论"},
+{id:"WX78",name:"\"四个量\"万用思维框架（增量/存量/变量/定量）",sub:"四个量",cat:"写作方法论"},
+{id:"WX79",name:"感谢信\"3+3+4\"框架",sub:"感谢信",cat:"写作方法论"},
+{id:"WX80",name:"\"五化建设\"基层治理框架（实体化/穿透化/最优化/闭环化/智能化）",sub:"基层治理",cat:"写作方法论"},
+{id:"WX82",name:"\"三破\"心法：破冰→破题→破局",sub:"破题立论",cat:"写作方法论"},
+{id:"WX83",name:"\"9 种功夫 84 个组合\"万能框架（真细实/深狠巧/长硬苦等）",sub:"功夫框架",cat:"写作方法论"},
+{id:"WX84",name:"\"三因\"框架顶天立地：因地（特殊性）/因时（规律性）/因事（针对性）",sub:"三因框架",cat:"写作方法论"},
+{id:"WX85",name:"马哲赋能\"3 把钥匙\"（含逻辑前置、理信交融）",sub:"马哲赋能",cat:"写作方法论"},
+{id:"WX86",name:"\"五个相\"统筹\"既要又要还要\"（一致/统一/协调/结合/贯通）",sub:"五个相",cat:"写作方法论"},
+{id:"WX88",name:"\"主观能动\"4 步登神成段法",sub:"主观能动",cat:"写作方法论"},
+{id:"WX89",name:"年度热词\"韧性\"：命题逻辑+质量互变溯源+四套框架",sub:"韧性",cat:"写作方法论"},
+{id:"WX90",name:"\"4 个导向\"笔面一体框架（问题/目标/结果/价值）",sub:"四个导向",cat:"写作方法论"},
+{id:"WX91",name:"\"12 个转变\"搭热点框架（理念/治理/模式各 4）",sub:"12转变",cat:"写作方法论"},
+{id:"WX92",name:"作文\"帽子\"5 大句式（时代坐标/功能类比/过程比喻/列举挑战/揭示本质）",sub:"开篇戴帽",cat:"写作方法论"},
+{id:"WX93",name:"\"四力\"笔试面试万能框架（合力/内力/动力/活力）",sub:"四力框架",cat:"写作方法论"},
+{id:"WX94",name:"\"4 个一+4 个全\"社会治理框架（一扇门/一揽子/一体化/一盘棋）",sub:"社会治理",cat:"写作方法论"},
+{id:"WX95",name:"\"深韧新实\"四字破题诀",sub:"四字诀",cat:"写作方法论"},
+{id:"WX97",name:"凸显省情 2 绝招（战略使命进标题/简称进结尾）",sub:"凸显省情",cat:"写作方法论"},
+{id:"WX98",name:"\"特色举措\"三句话（对象/举措/目标至少一个不基础）",sub:"特色举措",cat:"写作方法论"},
+{id:"WX99",name:"\"四问\"框架贯穿核心（人/力/路/钱往哪里去）",sub:"四问框架",cat:"写作方法论"},
+{id:"WX103",name:"\"破转提融\"四字底层逻辑",sub:"破转提融",cat:"写作方法论"},
+{id:"WX105",name:"\"四紧框架\"（紧抓/紧贴/紧扣/紧盯）",sub:"四紧框架",cat:"写作方法论"},
+{id:"WX106",name:"\"四动\"框架（带动/驱动/联动/行动）",sub:"四动框架",cat:"写作方法论"},
+{id:"WX107",name:"\"致广大而尽精微\"：升维看三高+降维做三好",sub:"升维降维",cat:"写作方法论"},
+{id:"WX113",name:"\"5+N+1\"治理监管框架（五类监管/N 种组合/一个目的）",sub:"治理监管",cat:"写作方法论"},
+{id:"WX114",name:"写出省情烙印\"4 大笔法\"（战略+工程/目标+落地/路径+文章/赶考+精神）",sub:"省情笔法",cat:"写作方法论"},
+{id:"WX120",name:"\"四个关系\"写出思辨味落地感（远近/点面/破立/管放）",sub:"四个关系",cat:"写作方法论"},
+{id:"WX122",name:"\"1+2+3+4\"供需思维框架（一条主线/两侧拆解/三维溯源/四项施策）",sub:"供需思维",cat:"写作方法论"},
+{id:"WX123",name:"\"发展类题目\"5 问框架（基础/资源/路径/融合/协同）",sub:"产业五问",cat:"写作方法论"},
+{id:"WX126",name:"\"3 板斧\"扬长板/补短板/育新板",sub:"三板斧",cat:"写作方法论"},
+{id:"WX127",name:"\"4 化\"框架提升答题格局（全域化/品质化/多元化/内涵化）",sub:"四化框架",cat:"写作方法论"},
+{id:"WX130",name:"概括归纳\"3 个有\"（脑中有层次/眼里有关系/下笔有次序）",sub:"概括归纳",cat:"写作方法论"},
+{id:"WX131",name:"提炼\"对策举措\"3 关键词（立牌子/分类型/定层级）",sub:"对策提炼",cat:"写作方法论"},
+{id:"WX132",name:"概括\"工作成效\"3 要素+5 关键字（保推提破建）",sub:"成效概括",cat:"写作方法论"},
+{id:"WX133",name:"\"规范发展\"类题三步走（盯材料找问题→推导想对策→放管结合促发展）",sub:"规范发展",cat:"写作方法论"},
+{id:"WX134",name:"总结提纲\"3 式+3 性\"（总体式提炼/体系式归纳/概括式表达+系统性/科学性/有效性）",sub:"总结提纲",cat:"写作方法论"},
+{id:"WX136",name:"\"5 个一\"要点举措框架（一条心/一本账/一盘棋/一张图/一张网）",sub:"五个一",cat:"写作方法论"},
+{id:"WX137",name:"\"四大行动\"产业类主题通关框架（扩量/提质/延链/增效）",sub:"四大行动",cat:"写作方法论"},
+{id:"WX139",name:"\"4 大方法论\"写\"工作部署\"（认识论/辩证论/系统论/战略论）",sub:"工作部署",cat:"写作方法论"},
+{id:"WX140",name:"\"三有\"短评双框架（夸夸类递进式/纠偏类辩证式）",sub:"短评",cat:"写作方法论"},
+{id:"WX141",name:"\"四多框架\"答全答准对策（多主体/多场景/多阵地/多维度）",sub:"四多框架",cat:"写作方法论"},
+{id:"WX142",name:"变\"表态\"为\"派活\"：一个思维写出对策落地感",sub:"派活思维",cat:"写作方法论"},
+{id:"WX143",name:"\"类型化\"对策：逻辑可迁移+结构可复制+要素可替换",sub:"类型化",cat:"写作方法论"},
+{id:"WX144",name:"推介词\"5 个关键跃迁\"（标题/素材/意象/站位/姿态）",sub:"推介词",cat:"写作方法论"},
+{id:"WX145",name:"\"四谋四干\"框架（谋定快干/谋早先干/谋准巧干/谋深实干）",sub:"四谋四干",cat:"写作方法论"},
+{id:"WX147",name:"\"变与不变\"写出思辨感（目标变方向不变/方法变规律不变/形态变本质不变）",sub:"变与不变",cat:"写作方法论"},
+{id:"WX148",name:"\"三推三向\"框架：3 组推句+8 关键词（+三转化升维）",sub:"三推三向",cat:"写作方法论"},
+{id:"WX149",name:"\"3 定位+3 意识+3 路径\"开头法（22 关键词库）",sub:"开头三步",cat:"写作方法论"},
+{id:"WX151",name:"\"五位一体\"社区治理框架（设施/联动/互嵌/数智/新群体）",sub:"社区治理",cat:"写作方法论"},
+{id:"WX152",name:"经验交流\"1 道题+3 句话\"（读题眼对应表/三层结构/提炼规律升华）",sub:"经验交流",cat:"写作方法论"},
+{id:"WX153",name:"宣传引导\"3 个方法论\"（对谁说/说什么/怎么说）",sub:"宣传引导",cat:"写作方法论"},
+{id:"WX154",name:"\"显功 VS 潜功\"3 段 11 点写议论思辨感",sub:"显功潜功",cat:"写作方法论"},
+{id:"WX158",name:"\"7 个思维\"写新写好思维理念（投行/有解/链式/极限/归零/增值/场景）",sub:"七个思维",cat:"写作方法论"},
+{id:"WX159",name:"\"跨界融合\"一个加号两种模式（文旅+是提质/+文旅是扩面）",sub:"跨界融合",cat:"写作方法论"},
+{id:"WX160",name:"\"数智便民\"5 要素+3 场景（政务办事/生活便利/特殊群体）",sub:"数智便民",cat:"写作方法论"},
+{id:"WX161",name:"\"3 破 3 立\"高能立论+三种变式",sub:"三破三立",cat:"写作方法论"},
+{id:"WX162",name:"\"7 个办\"优化服务（一窗综办/一事联办/容缺办/免证办/跨域办/智慧办/兜底办）",sub:"七个办",cat:"写作方法论"},
+{id:"WX163",name:"\"钉钉子\"4 种钉法（钉得准/盯得牢/钉得深/钉得正）",sub:"钉钉子",cat:"写作方法论"},
+{id:"WX164",name:"\"4 个转变\"写出高级感（由散向聚/由大向优/由管向服/由粗向精）",sub:"转变思维",cat:"写作方法论"},
+{id:"WX165",name:"发展类举措\"3 个类型化思路\"（下沉拓展/跨界融合/传统升级）",sub:"发展举措",cat:"写作方法论"},
+{id:"WX168",name:"协同\"三跨\"（跨部门/跨层级/跨领域）",sub:"协同治理",cat:"写作方法论"},
+{id:"WX169",name:"\"三个关乎\"开头法（群众冷暖/主题着力点/发展大局）",sub:"三个关乎",cat:"写作方法论"},
+{id:"WX170",name:"\"3 个反着来\"写细写心为民服务（写潜功/写小事/写细节）",sub:"为民服务",cat:"写作方法论"},
+{id:"WX171",name:"\"三思法\"论证（思危→思变→思进）",sub:"三思论证",cat:"写作方法论"},
+{id:"WX173",name:"\"两看两没有\"同构辩证法",sub:"同构辩证",cat:"写作方法论"},
+{id:"WX175",name:"\"2+4+5\"分析题干提观点（两大观点/四大规律/五对范畴）",sub:"审题立意",cat:"写作方法论"},
+{id:"WX177",name:"\"双向校准\"负负得正议论法（防过+防不及→回归正道）",sub:"双向校准",cat:"写作方法论"},
+{id:"WX178",name:"\"5 大治理\"基层治理（主动/源头/数字/综合/闭环）",sub:"五大治理",cat:"写作方法论"},
+{id:"WX179",name:"\"因地制宜\"4 种写法（禀赋拆解/对比升华/分类施策/正本清源）",sub:"因地制宜",cat:"写作方法论"},
+{id:"WX180",name:"新闻短评\"1+3+1\"（一个核心观点/三层分论点/一次价值升华）",sub:"新闻短评",cat:"写作方法论"},
+{id:"WX181",name:"\"2 层迂回\"叙议交融（叙一层议一层再叙一层再议一层）",sub:"叙议交融",cat:"写作方法论"},
+{id:"WX182",name:"\"3 个化\"受众视角（分众化/节点化/场景化）",sub:"受众视角",cat:"写作方法论"},
+{id:"WX185",name:"\"新兴产业\"3 看+4 全+4 化高级框架",sub:"新兴产业",cat:"写作方法论"},
+{id:"WX186",name:"\"小而美\"乡村振兴方法论（小切口小体量小步子×三重美）",sub:"乡村振兴",cat:"写作方法论"},
+{id:"WX187",name:"\"六组关系\"写好创新（新旧/破立/快慢/传统现代/量变质变/实干创新）",sub:"六组关系",cat:"写作方法论"},
+{id:"WX189",name:"\"两本书\"写好学习（有字之书+无字之书）",sub:"两本书",cat:"写作方法论"},
+{id:"WX190",name:"区分\"三种效益\"两条原则（看结果不看手段/看主要矛盾不看次要矛盾）",sub:"三种效益",cat:"写作方法论"},
+{id:"WX192",name:"\"5 略统筹\"写站位格局（战略/方略/谋略/策略/胆略）",sub:"五略统筹",cat:"写作方法论"},
+{id:"WX193",name:"经验做法\"6 类 18 个字\"（场景驱动/流程再造/机制创新/技术赋能/载体创建/闭环督导）",sub:"经验做法",cat:"写作方法论"},
+{id:"WX194",name:"论点具体化\"6 种逻辑方法\"（前 3 种：因果回溯/假设反正/现象点化）",sub:"论点事例",cat:"写作方法论"},
+{id:"WX06",name:"列框架两层次三步法：关键词→动宾短语→效果字聚焦",sub:"框架搭建",cat:"结构方法"},
+{id:"WX11",name:"\"二横三纵\"5 种段落展开形式",sub:"段落展开",cat:"结构方法"},
+{id:"WX20",name:"\"12341\"圣诞树装配结构（关键/重点/导向/问题/目的）",sub:"句段框架",cat:"结构方法"},
+{id:"WX23",name:"\"3+3+3\"金字塔框架：三环节×三动力×三主体",sub:"观点展开",cat:"结构方法"},
+{id:"WX25",name:"五层论证法：点题→正论→反论→举例→结论",sub:"观点论证",cat:"结构方法"},
+{id:"WX27",name:"\"4 层设问\"论证法：引出→设问→过渡→回答",sub:"设问论证",cat:"结构方法"},
+{id:"WX37",name:"\"焦点锚点落点\"分论点法+\"三明治式\"论证",sub:"分论点论证",cat:"结构方法"},
+{id:"WX41",name:"\"起承转合\"四步论述（金句→阐述→形势→实干）",sub:"起承转合",cat:"结构方法"},
+{id:"WX49",name:"段落分层\"3 个抓手\"（重复结构句/同维度不同要素/相同牵引词）",sub:"段落层次",cat:"结构方法"},
+{id:"WX50",name:"\"引议联结\"四步论证法",sub:"引议联结",cat:"结构方法"},
+{id:"WX61",name:"\"A+B+C 三位一体\"论述框架",sub:"三位一体",cat:"结构方法"},
+{id:"WX96",name:"\"三点一线\"论述\"A 与 B\"辩证统一（关系点/结合点/示范点+延长线）",sub:"三点一线",cat:"结构方法"},
+{id:"WX104",name:"\"一带三\"类型化大作文 3 种写法（递进/并列/辩证）",sub:"一带三",cat:"结构方法"},
+{id:"WX157",name:"递进\"3 大结构\"（链条/爬坡/纵深递进）",sub:"递进结构",cat:"结构方法"},
+{id:"WX10",name:"4 大类 33 个通用动词（一贯二抓三提四推）",sub:"通用动词",cat:"词句升级"},
+{id:"WX14",name:"6 类高级过渡句式（重要性 5 式+举措部署 3 式+成效启示 3 式）",sub:"过渡句式",cat:"词句升级"},
+{id:"WX15",name:"\"抓落实\"6 个切入点 33 个句式",sub:"落实写作",cat:"词句升级"},
+{id:"WX17",name:"\"3 大转折\"型过渡句式（经验启示/问题不足/原因剖析）",sub:"转折过渡",cat:"词句升级"},
+{id:"WX40",name:"\"6 个是\"写\"思想认识\"（式子句六类）",sub:"思想认识",cat:"词句升级"},
+{id:"WX44",name:"\"对策举措\"万能句式库（四期 12 式：3 动词+短语→4 动词→副词修饰动词链）",sub:"对策句式",cat:"词句升级"},
+{id:"WX47",name:"\"论述句\"万能句式库（三期：关联词上做文章）",sub:"论述句式",cat:"词句升级"},
+{id:"WX48",name:"举例子\"3 方法+7 句式\"（单例聚焦/多例排比/点面结合）",sub:"举例论证",cat:"词句升级"},
+{id:"WX55",name:"论述句第四期：越是…越要/过不了 A 关就过不了 B 关/系统工程句",sub:"论述句式",cat:"词句升级"},
+{id:"WX60",name:"成效副词\"4 类 9 个\"（显著/明显/更加、加速/不断、全面/广泛、持续/稳步）",sub:"成效副词",cat:"词句升级"},
+{id:"WX62",name:"对策句式第五期（密集嫁接型/对标呵护型/对接融入型）",sub:"对策句式",cat:"词句升级"},
+{id:"WX135",name:"写活句子公式：比喻找喻体→比拟加动作→合成句子",sub:"写活句子",cat:"词句升级"},
+{id:"WX146",name:"\"历史纵深感\"3 个高能句式",sub:"历史纵深",cat:"词句升级"},
+{id:"WX155",name:"议论升华\"4 大方向\"（往高拔/往远看/往深挖/往回落）",sub:"议论升华",cat:"词句升级"},
+{id:"WX156",name:"\"10 种作用\"写法（放大/叠加/牵引/催化/兜底/杠杆/纽带/示范/倒逼等）",sub:"作用句式",cat:"词句升级"},
+{id:"WX166",name:"\"6 个高级词\"写活分论点（映照/催生/勾勒/标注/浸润等）",sub:"高级动词",cat:"词句升级"},
+{id:"WX172",name:"\"从…到…再到…\"递进句式 3 种变式（阶段演进/范围拓展/由表及里）",sub:"递进句式",cat:"词句升级"},
+{id:"WX188",name:"辩证句式\"三个一\"（一枚硬币/一面镜子/一张产床）",sub:"三个一",cat:"词句升级"},
+{id:"WX191",name:"\"6 个高级句式\"写深写新\"问题表现\"",sub:"问题句式",cat:"词句升级"},
+{id:"WX01",name:"干部考察评价用语库（5 方面 50 条＋6 类 30 条）",sub:"谈心谈话",cat:"金句素材"},
+{id:"WX03",name:"金句积累·创新改革\"破立\"语段（原句+替换法）",sub:"开篇戴帽",cat:"金句素材"},
+{id:"WX04",name:"金句积累·\"早与好\"状态句（字眼拆解+迁移改写）",sub:"动员部署",cat:"金句素材"},
+{id:"WX05",name:"问题表述·\"三种豆腐\"比拟倾向",sub:"问题表述",cat:"金句素材"},
+{id:"WX21",name:"金句四技巧：AA/AB/ABA/ABC（+使用两原则）",sub:"金句技巧",cat:"金句素材"},
+{id:"WX43",name:"用典故\"2 方向 2 作用 2 内涵\"+五类常用典故",sub:"典故运用",cat:"金句素材"},
+{id:"WX69",name:"\"苏超联赛\"万能素材：一例打通五热点",sub:"万能素材",cat:"金句素材"},
+{id:"WX75",name:"\"群众办事六个办\"实战素材框架",sub:"政务服务",cat:"金句素材"},
+{id:"WX87",name:"\"虑胜者必图其终，成功者先计于始\"始终思维三步吃透",sub:"始终思维",cat:"金句素材"},
+{id:"WX100",name:"\"一例降十会\"之广东百千万工程（四维度+两用法）",sub:"万能素材",cat:"金句素材"},
+{id:"WX102",name:"\"6 匹快马\"开头结尾气势句",sub:"马字句",cat:"金句素材"},
+{id:"WX128",name:"\"张雪机车\"热点案例库：3 层面+6 角度+1 思维",sub:"热点案例",cat:"金句素材"},
+{id:"WX129",name:"\"X 经济\"新提法库：4 类 14 种经济形态+三种用法",sub:"新提法",cat:"金句素材"},
+{id:"WX138",name:"\"舞台\"排比法：三类舞台六种镜头（空间/时间/精神）",sub:"排比句",cat:"金句素材"},
+{id:"WX150",name:"\"主角\"三句台词的笔面运用（六部箴言/主动淬炼/自我认同）",sub:"主角台词",cat:"金句素材"},
+{id:"WX167",name:"\"5 个俗语\"写接地气",sub:"俗语活用",cat:"金句素材"},
+{id:"WX174",name:"\"十五五\"基础设施\"六张网\"（水网/地下管网/新型电网/物流网/算力网/通信网）",sub:"六张网",cat:"金句素材"},
+{id:"WX176",name:"\"义乌经验\"3 内涵 8 场景",sub:"万能素材",cat:"金句素材"},
+{id:"WX183",name:"\"拎马桶改造\"万能素材：3 内涵+9 场景",sub:"万能素材",cat:"金句素材"},
+{id:"WX22",name:"分论点三大思维模型：下棋/打牌/算术",sub:"分论点",cat:"标题技巧"},
+{id:"WX26",name:"视觉锤+文字钉：重复写\"四感\"标题（动词重复四诀）",sub:"重复标题",cat:"标题技巧"},
+{id:"WX28",name:"前置型+后置型 12 种重复性标题视觉锤",sub:"重复标题",cat:"标题技巧"},
+{id:"WX38",name:"\"守正创新\"3 个框架+金句",sub:"守正创新",cat:"标题技巧"},
+{id:"WX45",name:"\"数理化\"三组科学类比喻词标题",sub:"比喻标题",cat:"标题技巧"},
+{id:"WX77",name:"总结报告\"一字点睛法\"：精准单字+有力\"新\"字短语",sub:"一字点睛",cat:"标题技巧"},
+{id:"WX184",name:"大标题\"3 个方法\"（首式截断：双字对比/双字辩证）",sub:"大标题",cat:"标题技巧"},
+{id:"WX76",name:"面试综合分析题\"三步法\"（有立场/有观点/有方法）",sub:"综合分析",cat:"即兴发言"},
+{id:"WX81",name:"人际关系题\"五感\"框架（方向/信任/边界/节奏/成长）",sub:"人际关系",cat:"即兴发言"},
+{id:"WX108",name:"\"1+2+3\"分析框架（一个定位/两个方面/三个思维）",sub:"分析框架",cat:"即兴发言"},
+{id:"WX109",name:"\"1+3+4\"热点现象分析框架（一个核心/三个维度/四个启示）",sub:"现象分析",cat:"即兴发言"},
+{id:"WX110",name:"\"3+2+1\"态度观点题框架（三个看法/两个方法/一个做法）",sub:"态度观点",cat:"即兴发言"},
+{id:"WX111",name:"讲话类态度观点题\"3+3+3\"（三个深刻/三个读懂/三个做到）",sub:"讲话态度题",cat:"即兴发言"},
+{id:"WX112",name:"两面性社会现象题\"1+3+3\"（一个主流/三层递进/三个打法）",sub:"两面现象题",cat:"即兴发言"},
+{id:"WX115",name:"\"冰山模型\"四层归因（主体/制度/观念/文化）",sub:"归因分析",cat:"即兴发言"},
+{id:"WX116",name:"结合岗位\"三个向\"（首向截断：向前奔跑/向上生长）",sub:"岗位表态",cat:"即兴发言"},
+{id:"WX117",name:"\"3 个关键字\"答三大主体（政府引领/社会协同/个人尽责）",sub:"三大主体",cat:"即兴发言"},
+{id:"WX119",name:"结合岗位\"谈认识\"三个有（眼里有光/手里有方/肩上有责）",sub:"岗位认识",cat:"即兴发言"},
+{id:"WX121",name:"\"3 个关键词\"答出系统味道（动态平衡/同步增益/有机融合）",sub:"关键词框架",cat:"即兴发言"},
+{id:"WX124",name:"\"正方形答题法\"四步答面试观点题",sub:"正方形答题法",cat:"即兴发言"},
+{id:"WX125",name:"\"3 维分析\"从现象看本质（周期性/结构性/体系性）",sub:"三维分析",cat:"即兴发言"},
+{id:"WX58",name:"\"3 个悖论\"写深问题矛盾（投入产出/供给需求/服务感受）",sub:"悖论写法",cat:"问题分析"},
+{id:"WX101",name:"\"矛盾—问题—困难—挑战\"四词辨析与分层运用",sub:"四词辨析",cat:"问题分析"},
+{id:"WX42",name:"归纳\"现状问题\"4 关键字：有/还/较/不（+6 个常用句尾）",sub:"问题表述",cat:"修改方法"},
+{id:"WX118",name:"材料引用\"他说\"变\"我说\"3 法（场景融入/对比升华/延伸阐释）",sub:"材料转化",cat:"修改方法"},
+{id:"WX12",name:"计划秒变总结三步法：移→顺→换（动宾改主谓）",sub:"计划变总结",cat:"总结技巧"},
+{id:"WX59",name:"调研报告保姆级教程：5 板块 10 句式（标题/开头/做法/问题/对策）",sub:"调研报告",cat:"调研报告"},
+{id:"WX07",name:"会议纪要\"认为/指出/强调/要求\"四用语辨析",sub:"会议纪要",cat:"文种辨析"},
+{id:"WX19",name:"会议纪要实战：\"纪其髓、择其要\"＋归堆→排序→整饬",sub:"会议纪要",cat:"文种规范"},
+{id:"WX02",name:"竞聘演讲三段骨架：谈经历→讲优势→谈未来",sub:"竞聘演讲",cat:"职场表达"},
+{id:"WX195",name:"检视问题负面表述·学习类（学悟落差/四个不够/猛子扎不下去）",sub:"学习类",cat:"检视负面表述库"},
+{id:"WX196",name:"检视问题负面表述·作风类（干而不\"X\"/落实执行欠一步）",sub:"作风类",cat:"检视负面表述库"},
+{id:"WX197",name:"检视问题负面表述·担当类（三个有差距/担当软塌塌/四个有所减弱）",sub:"担当类",cat:"检视负面表述库"},
+{id:"WX198",name:"个人年度总结三段模板（成绩四板块/不足三差距/打算四坚持）",sub:"个人总结",cat:"成稿范例"},
+{id:"WX199",name:"座谈发言\"三对范畴\"骨架（取下与戴上/失去与收获/当下与未来）",sub:"座谈发言",cat:"成稿范例"},
+{id:"WX200",name:"检视整改\"下半篇文章\"四发力（立根固本/落细落小/修枝剪叶/直面问题）",sub:"检视整改",cat:"成稿范例"},
+{id:"WX201",name:"机关服务岗位修养\"守两条、提三力\"（预见力/协调力/承受力）",sub:"岗位感悟",cat:"成稿范例"},
+{id:"WX202",name:"成长感悟类发言双范例（一份初心三种能力四个方向/悟能悟空悟净）",sub:"成长感悟",cat:"成稿范例"},
+{id:"WX203",name:"元旦贺词骨架（回望四势+展望+祝福）",sub:"元旦贺词",cat:"成稿范例"},
+{id:"WX204",name:"干事创业\"想干能干敢干\"+抓落实三部曲（从我做起/马上就办/久久为功）",sub:"作风落实",cat:"成稿范例"},
+{id:"WX205",name:"以文辅政\"摸实情、讲实话、求实效\"（三功/三文/三抓手）",sub:"以文辅政",cat:"成稿范例"},
+{id:"WX206",name:"标兵交流发言稿全骨架（牌子/旗子/号子 三三得九）",sub:"标兵发言",cat:"成稿范例"},
+{id:"WX207",name:"年度个人检查（对照检查）材料全骨架（三方面+四剖析+四个\"人\"）",sub:"对照检查",cat:"成稿范例"}
+];
+
+/* 少写几条关键方法的一句话用法，用于结果页和题库提示 */
+const HOW = {
+  'WX08':{how:'开头段四步：下定义 → 讲重要性 → 过渡句 → 扣热点。先把概念说清，再把站位抬高，最后落到本题。',ex:'所谓城市更新，是指在存量空间上……'},
+  'WX29':{how:'写“重要意义”用六个角度任选三：必然要求、实际举措、应有之义、迫切需要、重要法宝、必由之路。三句一组，层层加码。',ex:'这是……的必然要求，也是……的迫切需要。'},
+  'WX24':{how:'豹尾四步：一收（回扣主题）→ 二扬（拔高价值）→ 三落（落到人/事）→ 四喊（发出号召）。',ex:'唯有……才能……'},
+  'WX51':{how:'“A与B”四层：先各自成立，再相互依存，再分出主次，最后落到实践。四层写完，辩证味自然出来。',ex:'留是底线，改是重点，二者统一于……'},
+  'WX104':{how:'“一带三”大作文：一个总论点带三个分论点，可递进、可并列、可辩证，是考场最稳的结构。'},
+  'WX130':{how:'概括归纳“三个有”：脑中有层次（按主体/环节分类）、眼里有关系（并列还是因果）、下笔有次序（总括句领起，分条排列）。'},
+  'WX42':{how:'写“现状问题”可用“有、还、较、不”四个字领起：有短板、还不平衡、较为突出、不够充分。'},
+  'WX44':{how:'对策句式三段：动词+对象+目的，如“建立清单，明确该谁干”；再叠加副词，“持续、全面、加快”提密度。'},
+  'WX141':{how:'对策写全用“四多”：多主体（政府/企业/社会/群众）、多场景、多阵地、多维度。缺哪个补哪个。'},
+  'WX142':{how:'把“表态”变“派活”：不写“要高度重视”，写“谁、在什么时间、把什么事做到什么程度”。'},
+  'WX115':{how:'归因用冰山模型四层：主体（谁）→ 制度（机制）→ 观念（认识）→ 文化（风气）。写原因题由浅入深。'},
+  'WX16':{how:'数字思维六招：三比（纵向比、横向比、占比）、二改（改写单位、改写表述）、一形（用数据形成观点）。'},
+  'WX22':{how:'分论点三模型：下棋（布局/落子/收官）、打牌（底牌/出牌/配合）、算术（加减乘除）。用比喻串起三个分论点。'},
+  'WX140':{how:'短评两框架：夸夸类用递进式（是什么—为什么好—怎么更好）；纠偏类用辩证式（现象—根源—校正）。'},
+  'WX180':{how:'新闻短评“1+3+1”：一个核心观点、三层分论点、一次价值升华。500字刚好够。'},
+  'WX25':{how:'五层论证：点题 → 正论 → 反论 → 举例 → 结论。一层不缺，段落就有骨骼。'},
+  'WX118':{how:'材料引用“他说”变“我说”：场景融入、对比升华、延伸阐释，别整句照搬。'}
+};
+
+/* ============================================================
+   工具函数
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nchars = s => (String(s||'').replace(/\s/g,'')).length;
+const norm = s => String(s||'').replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g,'').toLowerCase();
+const hits = (s,re) => (String(s||'').match(re)||[]).length;
+const paras = s => String(s||'').split(/\n+/).map(x=>x.trim()).filter(Boolean);
+const TYPE_LABEL = {gk:'概括归纳',fx:'综合分析',dc:'对策建议',dp:'短评写作',zw:'大作文'};
+
+const STORE_KEY = 'shenlun_desk_v2';
+function loadStore(){
+  try{ const raw = localStorage.getItem(STORE_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  return {answers:{}, records:[]};
+}
+const store = loadStore();
+let saveTimer = null;
+function persist(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{
+      localStorage.setItem(STORE_KEY, JSON.stringify({answers:store.answers, records:store.records.slice(-120)}));
+      const tag = $('#autosaveTag'); if(tag) tag.textContent = '已存 ' + new Date().toLocaleTimeString('zh-CN',{hour12:false}).slice(0,5);
+    }catch(e){}
+  }, 600);
+}
+
+const state = { setIdx:0, qIdx:0, t0:0, sec:0, tick:null, last:null, view:'practice' };
+
+/* ============================================================
+   评分引擎
+   ============================================================ */
+function scorePoints(text, q){
+  const n = norm(text);
+  return (q.points||[]).map(p=>{
+    const matched = p.keys.filter(k=> n.includes(norm(k)));
+    const ratio = Math.min(1, matched.length/(p.need||1));
+    return Object.assign({}, p, {matched, ratio, got: +(p.w*ratio).toFixed(2)});
+  });
+}
+
+function wordCheck(chars,q){
+  if(chars>=q.min && chars<=q.max) return {state:'ok', detail:'字数合规'};
+  if(chars>q.max) return {state: chars>q.max*1.08?'fail':'part', detail:'超出上限 '+(chars-q.max)+' 字'};
+  if(chars>=q.min*0.85) return {state:'part', detail:'还差 '+(q.min-chars)+' 字'};
+  return {state:'fail', detail:'不足下限，差 '+(q.min-chars)+' 字'};
+}
+
+function evaluate(q, text){
+  const chars = nchars(text);
+  const pts = scorePoints(text,q);
+  const contentRaw = pts.reduce((a,p)=>a+p.got,0);
+  const checks = [];
+  const add = (dim,label,w,st,detail)=>checks.push({dim,label,w,state:st,detail});
+
+  /* 通用语言检查 */
+  const spoken = (text.match(/我觉得|我感觉|说白了|其实吧|然后呢|挺多的|特别多|啥|咋|反正|差不多|搞一下|弄一下/g)||[]);
+  const noCap = !/[。！？；]/.test(text);
+  const formal = spoken.length===0 && !noCap;
+
+  if(q.type==='gk'){
+    add('structure','总括句领起',1, /(主要|集中|总体|整体|突出|表现在|问题在于|做法是|经验是|呈现|存在)/.test(text.slice(0,110))?'ok':'fail',
+      '开头一句话点明“有几方面”，再分条展开');
+    add('structure','分条排列',2, hasItems(text)?'ok':'fail', '用“一是……二是……”或“1. 2. 3.”分条');
+    add('language','字数合规',1.5, wordCheck(chars,q).state, wordCheck(chars,q).detail);
+    add('language','书面规范',1.5, formal?'ok':'part', spoken.length?('口语化表达：'+spoken.slice(0,4).join('、')):(noCap?'缺少句末标点':'书面语规范'));
+  }
+  if(q.type==='fx'){
+    add('structure','观点句定性',1.5, /(实质|本质|说明|意味着|反映|所谓|核心|关键在于|概括|深层|表面|看似|症结|根源)/.test(text)?'ok':'fail','第一句就要把“是什么”说透');
+    const layerDefs = {
+      cause:/因为|由于|原因|根源|在于|背后|源于|约束|受制/,
+      effect:/导致|造成|影响|危害|后果|使得|进而|挤占|抬高了/,
+      solution:/因此|所以|可见|应当|需要|破解|关键|对策|建议/
+    };
+    const needLayers = q.layerReq || ['cause','effect','solution'];
+    const layers = needLayers.filter(k=>layerDefs[k].test(text)).length;
+    add('structure','分层展开',1.5, layers>=needLayers.length?'ok':layers>=needLayers.length-1?'part':'fail', '按“实质—表现—危害—对策”分层');
+    add('language','字数合规',1, wordCheck(chars,q).state, wordCheck(chars,q).detail);
+    add('language','书面规范',1, formal?'ok':'part', spoken.length?('口语化：'+spoken.slice(0,4).join('、')):'书面语规范');
+  }
+  if(q.type==='dc'){
+    add('structure','分条作答',2, hasItems(text)?'ok':'fail','五条左右，一条一个动作');
+    add('structure','主体意识',1.5, hits(text,/政府|部门|企业|社会|群众|社区|干部|平台|服务商|学校|市场|村/g)>=2?'ok':'fail','点明“谁来干”');
+    add('structure','动词领起',1.5, hits(text,/加强|完善|建立|健全|推动|推进|强化|优化|落实|引导|规范|加大|创新|整合|提升|培育|探索|构建|深化|严格|统筹|组建|清理/g)>=2?'ok':'fail','每条以动词开头，少用“要”字空转');
+    add('language','字数合规',2, wordCheck(chars,q).state, wordCheck(chars,q).detail);
+    add('language','书面规范',2, formal?'ok':'part', spoken.length?('口语化：'+spoken.slice(0,4).join('、')):'书面语规范');
+    add('language','做法加目的',1, hits(text,/以|从而|确保|便于|让|为|避免|防止/g)>=2?'ok':'fail','写成“做什么+为了什么”');
+  }
+  if(q.type==='dp'){
+    const first = (paras(text)[0]||'');
+    const hasTitle = /小窗口/.test(first) && /大服务/.test(first);
+    add('structure','标题',1, hasTitle?'ok':'fail','题目已给定，须独立成行照写');
+    add('structure','段落分明',2, paras(text).length>=3?'ok':'part','500字分4段左右');
+    const layers = [/为什么|原因|根源|在于|因为|背后/,/要|应当|需要|一是|首先|关键/].filter(re=>re.test(text)).length;
+    add('structure','有分析有对策',2, layers>=2?'ok':'part','不能只叙述，要有“为什么”和“怎么办”');
+    add('language','字数合规',2, wordCheck(chars,q).state, wordCheck(chars,q).detail);
+    add('language','书面规范',2, formal?'ok':'part', spoken.length?('口语化：'+spoken.slice(0,4).join('、')):'书面语规范');
+    const shortSent = (text.match(/[^。！？]{0,18}[。！？]/g)||[]).length / Math.max(1,(text.match(/[。！？]/g)||[]).length);
+    add('language','句子有力',1, shortSent>0.55?'ok':'part','短评多用短句，一句一个判断');
+    add('format','标题独立成行',1, hasTitle && first.length<28?'ok':'fail','首行只放标题');
+    add('format','篇幅合适',1, (chars>=420&&chars<=620)?'ok':'part','500字左右，不超600');
+    add('format','无多余格式',1, !/尊敬的|此致|敬礼|落款/.test(text)?'ok':'fail','短评不需要称谓、落款');
+  }
+  if(q.type==='zw'){
+    const ps = paras(text);
+    const first = ps[0]||'';
+    const hasTitle = first.length>=4 && first.length<=26 && !/[。！？]/.test(first) && !/^[一二三四五六七八九十]、/.test(first);
+    add('structure','标题',2, hasTitle?'ok':'fail','标题独立成行，4—26字，不用句号');
+    add('structure','开头立论',3, /(不是|而是|在于|必须|应当|唯有|关键在于|本质|意味着|说明|实践证明|说到底)/.test(text.slice(0,340))?'ok':'fail','首段引出话题并亮明中心论点');
+    const subCount = ps.slice(1,-1).filter(p=>{
+      if(/(要|需要|应当|必须|关键在于|重在|首在|根在|唯有|一方面|另一方面|首先|其次|再者|此外|同时|说到底|不是|而是|靠的是)/.test(p.slice(0,70))) return true;
+      const fs0 = (p.split(/[。！？]/)[0]||'');
+      return fs0.length>0 && fs0.length<=34 && p.length>=55;
+    }).length;
+    add('structure','分论点',3, subCount>=2?'ok':subCount===1?'part':'fail','中间段落各有分论点句，2—3个');
+    add('structure','结尾升华',2, /(唯有|只有|才能|归根结底|让我们|时代|答卷|未来|人民|金名片)/.test(text.slice(-300))?'ok':'part','结尾回扣主题并拔高');
+    const ev = hits(text,/例如|比如|譬如|以.{2,16}为例|正如|据统计|数据显示|据.{2,8}|A市|B市|C市|某县|某市|某地|某企业|某村|某镇/g);
+    add('argument','事例论证',4, ev>=2?'ok':ev===1?'part':'fail','至少两处具体事例，材料里的案例可直接用');
+    const ana = hits(text,/因为|由于|根源|本质|意味着|说明|可见|之所以|恰恰|背后/g);
+    add('argument','分析说理',3, ana>=2?'ok':ana===1?'part':'fail','举例之后要有一句“这说明……”');
+    const dq = /(\d+[%％]|百分之|亿|万吨|万亩|元|“|”)/.test(text);
+    add('argument','数据或引语',3, dq?'ok':'part','用数据、政策原话或专家观点增强说服力');
+    const formalE = spoken.length===0 && /(然而|因此|可见|不仅|而且|唯有|倘若|反之|与此同时|一方面|另一方面)/.test(text);
+    add('language','书面与句式',4, formalE?'ok':'part','书面语为主，句式有长短变化');
+    add('language','无口语',2, spoken.length===0?'ok':'fail', spoken.length?('口语化：'+spoken.slice(0,4).join('、')):'无口语表达');
+    add('format','字数',1, wordCheck(chars,q).state, wordCheck(chars,q).detail);
+    add('format','标点与分段',1, ps.length>=4 && /[。]/.test(text)?'ok':'fail','不少于4段，句末标点齐全');
+  }
+
+  /* 维度得分 */
+  const dims = {};
+  Object.keys(q.dims).forEach(k=>{
+    if(k==='content'){ dims[k] = Math.min(q.dims[k], +contentRaw.toFixed(1)); return; }
+    const cs = checks.filter(c=>c.dim===k);
+    const max = cs.reduce((a,c)=>a+c.w,0);
+    const got = cs.reduce((a,c)=>a+(c.state==='ok'?c.w:c.state==='part'?c.w*0.5:0),0);
+    dims[k] = max ? +(q.dims[k]*got/max).toFixed(1) : 0;
+  });
+  const lenFac = chars>=q.min ? 1 : chars>=q.min*0.8 ? 0.9 : chars>=q.min*0.6 ? 0.72 : 0.45;
+  if(dims.content!=null) dims.content = +(dims.content*lenFac).toFixed(1);
+  if(q.type==='zw'){
+    const stFac = chars>=q.min ? 1 : chars>=q.min*0.75 ? 0.85 : 0.6;
+    ['structure','argument','language'].forEach(k=>{ if(dims[k]!=null) dims[k]=+(dims[k]*stFac).toFixed(1); });
+  }
+  let total = +Object.values(dims).reduce((a,b)=>a+b,0).toFixed(1);
+
+  /* 异常兜底 */
+  const issues = [];
+  if(chars < 60){
+    issues.push({t:'作答过短，无法批改',p:'本题要求 '+q.min+'—'+q.max+' 字，你只写了 '+chars+' 字。先列提纲再成文，哪怕只把要点分条列出，也比空白强。'});
+    total = Math.min(total, +(q.score*0.1).toFixed(1));
+  }
+
+  if(chars < q.min*0.85 && chars >= 60){
+    issues.push({t:'篇幅不足：'+(q.min-chars)+' 字的缺口', p:'本题要求约 '+q.min+' 字，你写了 '+chars+' 字。字数不足会被直接限档，先把每个要点的“做法+效果”补全，再考虑文采。'});
+  }
+
+  /* 照抄检测 */
+  const copy = findCopy(text,q);
+  if(copy.length){
+    issues.push({t:'有 '+copy.length+' 处照抄材料',p:'材料原句只能作引子，须转成自己的概括。把长句压成“主体+做法+效果”，或换一个说法重述。',fix:'把重合句改成概括句，例如“A市以微改造替代大拆大建，保住了老街肌理”。'});
+  }
+
+  /* 要点缺失 */
+  const missing = pts.filter(p=>p.ratio<1);
+  missing.slice(0,5).forEach(p=>{
+    if(q.type==='zw'){
+      issues.push({t:'立意偏弱：'+p.label, p:'这一层意思占 '+p.w+' 分，全文没有明确体现。'+(p.ratio>0?'只沾到一点。':''), fix:'在开头亮观点或分论点首句里写清：'+p.label+'。'});
+    }else{
+      issues.push({t:'要点未覆盖：'+p.label, p:'这一条占 '+p.w+' 分，你的答案没有对应表述。'+(p.ratio>0?'只答出一部分。':''), fix:'补一句：'+p.label+'。'});
+    }
+  });
+
+  /* 结构与语言问题 */
+  checks.filter(c=>c.state!=='ok').forEach(c=>{
+    if(c.dim==='language' && c.label==='书面规范') return;
+    issues.push({t:c.label+'：'+c.detail, p: hintFor(c.label)});
+  });
+
+  const strengths = [];
+  pts.filter(p=>p.ratio>=1).slice(0,4).forEach(p=>strengths.push('答到要点：'+p.label));
+  if(checks.filter(c=>c.state==='ok').length>=4) strengths.push('结构完整，分条与层次清楚');
+
+  return {qid:q.id, chars, pts, checks, dims, total:Math.min(total,q.score), copy, issues, strengths, at:Date.now()};
+}
+
+function hasItems(t){
+  return hits(t,/(^|\n|\s)(第[一二三四五六七八九十]+[，、.]|[一二三四五六七八九十]+[，、]|\d+[.、．]|[（(][一二三四五六七八九十\d]+[)）])/g)>=2 || hits(t,/一是|二是|三是/g)>=2;
+}
+
+function hintFor(label){
+  const m = {
+    '总括句领起':'概括题先给“总—分”句式：本材料主要反映/该县主要做了以下几方面。阅卷人先看总括句定档。',
+    '分条排列':'分条不是形式，是让要点可见。用“一是/二是/三是”，一条一个要点，不交叉。',
+    '分条作答':'对策题一条一个动作，五条左右，每条 60—80 字，不要把所有事塞进一段。',
+    '观点句定性':'第一句必须回答“是什么”，如“这句话的实质是……”，不要从材料第一句开始复述。',
+    '分层展开':'按“实质—表现—危害—对策”或“是什么—为什么—怎么办”推进，缺一层就少一层分。',
+    '主体意识':'每条对策前想清楚“谁来干”：政府、企业、社会、群众，主体不同，动作不同。',
+    '动词领起':'用“建立、完善、整合、清理、规范”等动词开头，少用“要”字堆砌。',
+    '做法加目的':'对策写成“做什么+达到什么效果”，如“整合平台，让数据一次录入、多方复用”。',
+    '标题':'标题独立成行，控制在 4—26 字，不用句号，不用“浅谈/试论”这类空题。',
+    '段落分明':'按“开头—分析—对策—收束”分段，一段一个功能。',
+    '有分析有对策':'短评不能只讲现象，至少用一段追问“为什么”，再用一段回答“怎么办”。',
+    '标题独立成行':'首行只放标题，标题与正文之间空一行。',
+    '篇幅合适':'短评 500 字左右，写到 600 字以上就会稀释观点。',
+    '无多余格式':'短评不是公文，不加称谓、落款、日期。',
+    '开头立论':'首段用 3—4 句完成“引入—转折—亮观点”，中心论点要能被一句话概括。',
+    '分论点':'中间每段第一句写分论点，句式尽量统一但内容不重复。',
+    '结尾升华':'结尾回到主题词，再往价值层面抬一层，不要新开话题。',
+    '事例论证':'一段一个例子即可，例子要服务于论点，不要变成故事会。',
+    '分析说理':'例子后面必须跟一句“这说明/这恰恰证明”，把事例和论点接上。',
+    '数据或引语':'把材料里的数字、政策表述、专家观点用起来，论据才有着力点。',
+    '书面与句式':'少用“然后、就是说”，多用“然而、因此、可见”这类书面连接。',
+    '字数':'字数不足会直接限档；超太多说明废话多，删掉重复表述。',
+    '字数合规':'按题目字数写，少于下限 15% 基本判为不合格。',
+    '句子有力':'短评的力道来自短句和判断句，长句超过 40 字就拆开。',
+    '标点与分段':'四段以上，每段 3—6 句，句末标点齐全。',
+    '无口语感':'把口语换成书面语，如“挺重要”改“至关重要”。',
+    '书面规范':'答题用书面语，去掉“我觉得”“反正”“差不多”。'
+  };
+  return m[label] || '按题目要求调整这一项。';
+}
+
+function findCopy(text,q){
+  const clean = s => String(s||'').replace(/[\s，。、；：！？“”‘’（）()《》\-—…·,.;:!?"']/g,'');
+  const mats = (q._mats||[]).map(clean);
+  const segs = String(text).split(/[。；\n]/).map(x=>x.trim()).filter(x=>clean(x).length>=22);
+  return segs.filter(sg=>{
+    const c = clean(sg);
+    return mats.some(m=>m.includes(c));
+  });
+}
+
+/* ============================================================
+   渲染：题架
+   ============================================================ */
+function bestOf(qid){
+  const rs = store.records.filter(r=>r.qid===qid);
+  if(!rs.length) return null;
+  return rs.reduce((a,b)=> a.total>b.total?a:b);
+}
+function renderShelf(){
+  $('#setCount').textContent = BANK.length+' 套 · '+BANK.reduce((a,s)=>a+s.questions.length,0)+' 题';
+  $('#setList').innerHTML = BANK.map((s,si)=>{
+    const qs = s.questions.map((q,qi)=>{
+      const b = bestOf(q.id);
+      const on = si===state.setIdx && qi===state.qIdx;
+      return '<button class="qitem'+(on?' on':'')+'" data-set="'+si+'" data-q="'+qi+'">'
+        +'<span class="qt">'+esc(q.typeName)+' · '+esc(q.score)+'分</span>'
+        +'<span class="qs">'+esc(q.ask.slice(0,26))+(q.ask.length>26?'…':'')+'</span>'
+        +(b?'<span class="qb">'+b.total+'</span>':'<span class="qb" style="color:#B9BEB6">—</span>')
+        +'</button>';
+    }).join('');
+    const onSet = si===state.setIdx;
+    return '<div class="setcard'+(onSet?' on':'')+'">'
+      +'<button class="setbtn" data-set-open="'+si+'">'
+      +'<span class="st">'+esc(s.name)+'</span>'
+      +'<span class="n">'+s.questions.length+'题 / '+(s.questions.reduce((a,q)=>a+q.score,0))+'分</span>'
+      +'<span class="sm">'+esc(s.tag)+' · '+esc(s.intro)+'</span>'
+      +'</button>'
+      +'<div class="qlist">'+qs+'</div></div>';
+  }).join('');
+}
+function openShelf(){ $('#shelf').classList.add('on'); $('#scrim').classList.add('on'); }
+function closeShelf(){ $('#shelf').classList.remove('on'); $('#scrim').classList.remove('on'); }
+
+/* ============================================================
+   渲染：练习题
+   ============================================================ */
+function currentSet(){ return BANK[state.setIdx]; }
+function currentQ(){ return currentSet().questions[state.qIdx]; }
+
+function renderPaper(){
+  const s = currentSet();
+  $('#papersheet').innerHTML =
+    '<div class="paper-head">'
+    +'<div class="paper-kicker">给定材料 · '+esc(s.tag)+' · 仿真命题</div>'
+    +'<h1 class="paper-title">'+esc(s.name)+'</h1>'
+    +'<div class="paper-meta">共 '+s.materials.length+' 则材料　|　'+s.questions.length+' 道题　|　总分 '+s.questions.reduce((a,q)=>a+q.score,0)+' 分</div>'
+    +'</div>'
+    +s.materials.map(m=>'<section class="mat"><div class="mat-head"><span class="mat-no">'+esc(m.n)+'</span><span class="mat-title">'+esc(m.t.slice(0,12))+(m.t.length>12?'…':'')+'</span></div><div class="mat-body"><p>'+esc(m.t)+'</p></div></section>').join('');
+}
+
+function renderAsk(){
+  const q = currentQ();
+  const s = currentSet();
+  $('#qno').textContent = '第 '+(state.qIdx+1)+' 题 / 共 '+s.questions.length+' 题';
+  $('#qtype').textContent = q.typeName;
+  $('#qscore').textContent = q.score+' 分';
+  $('#qask').textContent = q.ask;
+  $('#qreq').textContent = q.req;
+  $('#qlimit').textContent = '目标 '+q.min+'—'+q.max+' 字';
+  $('#mtabScore').textContent = q.score+'分';
+  $('#qdots').innerHTML = s.questions.map((qq,qi)=>{
+    const b = bestOf(qq.id);
+    return '<button class="qdot'+(qi===state.qIdx?' on':'')+(b?' done':'')+'" data-jump="'+qi+'" title="第'+(qi+1)+'题"></button>';
+  }).join('');
+  $('#qprogress').textContent = '本题最高 '+(bestOf(q.id)?bestOf(q.id).total+' / '+q.score:'未作答');
+  const ta = $('#answer');
+  ta.value = store.answers[q.id]||'';
+  updateCount();
+  state.sec = 0; state.t0 = Date.now();
+  startTimer();
+  $('#papersheet').parentElement.scrollTop = 0;
+}
+
+function updateCount(){
+  const q = currentQ();
+  const c = nchars($('#answer').value);
+  $('#wordCount').textContent = c;
+  const box = $('#countBox');
+  box.classList.toggle('over', c>q.max);
+  box.classList.toggle('under', c>0 && c<q.min*0.85);
+}
+
+function startTimer(){
+  stopTimer();
+  state.tick = setInterval(()=>{
+    state.sec++;
+    const m = String(Math.floor(state.sec/60)).padStart(2,'0');
+    const s = String(state.sec%60).padStart(2,'0');
+    $('#timerText').textContent = m+':'+s;
+    $('#timer').classList.add('run');
+  },1000);
+  $('#timerText').textContent = '00:00';
+}
+function stopTimer(){ if(state.tick){clearInterval(state.tick); state.tick=null;} $('#timer').classList.remove('run'); }
+
+function loadQuestion(si,qi,silent){
+  state.setIdx = si; state.qIdx = qi;
+  currentQ()._mats = currentSet().materials.map(m=>m.t);
+  renderPaper(); renderAsk(); renderShelf();
+  if(!silent){ go('practice'); closeShelf(); const pc = $('#paneMaterial'); if(pc) pc.scrollTop=0; }
+}
+
+/* ============================================================
+   渲染：批改单
+   ============================================================ */
+function levelOf(ratio){
+  if(ratio>=0.85) return {k:'excellent',t:'优秀',s:'优'};
+  if(ratio>=0.72) return {k:'good',t:'良好',s:'良'};
+  if(ratio>=0.58) return {k:'pass',t:'合格',s:'合'};
+  return {k:'low',t:'待提升',s:'改'};
+}
+
+function renderResult(r, rec){
+  const q = currentQ();
+  const ratio = r.total / q.score;
+  const lv = levelOf(ratio);
+  const dimNames = {content:'内容',structure:'结构',language:'语言',argument:'论证',format:'规范'};
+  const dimsHtml = Object.keys(q.dims).map(k=>{
+    const v = r.dims[k]||0, max = q.dims[k];
+    const pct = Math.round(v/max*100);
+    return '<div class="dim"><span class="dim-name">'+dimNames[k]+'</span>'
+      +'<span class="dim-track"><i class="dim-fill'+(pct<60?' low':'')+'" style="width:'+pct+'%"></i></span>'
+      +'<span class="dim-num">'+v+'/'+max+'</span></div>';
+  }).join('');
+
+  const pointsHtml = r.pts.map((p,i)=>{
+    const st = p.ratio>=1?'hit':p.ratio>0?'part':'miss';
+    const label = st==='hit'?'已答到':st==='part'?'部分':'未覆盖';
+    return '<div class="pt-row '+st+'"><span class="pt-idx">'+String(i+1).padStart(2,'0')+'</span>'
+      +'<div class="pt-main"><div class="pt-label">'+esc(p.label)+'<span class="state '+st+'">'+label+'</span></div>'
+      +'<div class="pt-ev">'+(p.matched.length?'命中：'+esc(p.matched.slice(0,4).join(' / ')):'未检出对应表述')+'</div></div>'
+      +'<div class="pt-score">'+p.got+'/'+p.w+'</div></div>';
+  }).join('');
+
+  const advHtml = r.issues.slice(0,8).map(it=>'<li><div><strong>'+esc(it.t)+'</strong><p>'+esc(it.p)+'</p>'+(it.fix?'<span class="fix">'+esc(it.fix)+'</span>':'')+'</div></li>').join('')
+    || '<li><div><strong>没有发现明显问题</strong><p>要点、结构、语言都在线，可以对照参考答案，看看表达能否更凝练。</p></div></li>';
+
+  const outlineHtml = (q.ref.outline||[]).map(o=>'<div class="ro"><b>'+esc(o.h)+'</b><p>'+esc(o.t)+'</p></div>').join('');
+  const fullHtml = (q.ref.full||[]).map((p,i)=>'<p'+(i===0?' style="text-indent:0;font-weight:700"':'')+'>'+esc(p)+'</p>').join('');
+  const tipsHtml = (q.tips||[]).map(id=>{
+    const m = METHODS.find(x=>x.id===id);
+    if(!m) return '';
+    const how = HOW[id];
+    return '<div class="ro" style="margin-bottom:6px"><b>'+id+'</b><p><strong>'+esc(m.name)+'</strong>'+(how?'<br>'+esc(how.how):'')+'</p></div>';
+  }).join('');
+
+  const marked = markCopy((rec&&rec.snap)||store.answers[q.id]||'', q._mats||[]);
+
+  $('#resultPage').innerHTML =
+    '<div class="page-head"><div><h1 class="page-title">批改单</h1>'
+    +'<p class="page-desc">第 '+(state.qIdx+1)+' 题 · '+esc(q.typeName)+' · '+esc(currentSet().name)+'</p></div>'
+    +'<button class="btn btn-sm" data-act="back" style="margin-left:auto">回到作答</button></div>'
+    +'<div class="verdict"><div>'
+      +'<div class="scoreblock"><div class="scorebig">'+r.total+'<span>/'+q.score+'</span></div><span class="level '+lv.k+'">'+lv.t+'</span></div>'
+      +'<p class="vtitle">'+esc(q.ask)+'</p>'
+      +'<div class="vmeta"><span>字数 '+r.chars+'</span><span>用时 '+(rec?fmtSec(rec.sec):'—')+'</span>'
+      +'<span>要点 '+r.pts.filter(p=>p.ratio>=1).length+'/'+r.pts.length+'</span>'
+      +'<span>得分率 '+Math.round(ratio*100)+'%</span></div>'
+    +'</div><div class="dims">'+dimsHtml+'</div>'
+    +'<div class="stamp" aria-hidden="true"><div style="text-align:center"><b>'+lv.s+'</b><i>已批改</i></div></div></div>'
+
+    +'<div class="card"><div class="card-head"><h2 class="card-h">要点对照</h2><span class="card-note">按关键词命中计分，同义表述可得分</span></div>'
+      +'<div class="card-body">'+pointsHtml+'</div></div>'
+
+    +'<div class="card"><div class="card-head"><h2 class="card-h">改进建议</h2><span class="card-note">按失分影响排序</span></div>'
+      +'<div class="card-body"><ul class="advice">'+advHtml+'</ul></div></div>'
+
+    +'<div class="card" id="refCard"><div class="card-head"><h2 class="card-h">参考答案</h2><span class="card-note">示范文本，非唯一标准</span></div>'
+      +'<div class="card-body">'
+        +'<div class="refoutline">'+outlineHtml+'</div>'
+        +'<div class="refblock"><h4>参考成文</h4><div class="refbody">'+fullHtml+'</div></div>'
+        +'<div class="standard"><strong>评分标准：</strong>'+esc(q.ref.standard)+'</div>'
+        +'<h4 style="margin-top:14px;font-size:13px">本题适用方法</h4>'+tipsHtml
+        +'<div class="pitfalls">常见失分：'+(q.pitfalls||[]).map(p=>esc(p)).join('；')+'</div>'
+      +'</div></div>'
+
+    +'<div class="card"><div class="card-head"><h2 class="card-h">我的作答</h2><span class="card-note">'+r.chars+' 字 · 标红处为照抄材料</span></div>'
+      +'<div class="card-body"><div class="answer-review">'+marked+'</div>'
+      +'<div class="notice" style="border-top:0;padding:10px 0 0">本工具用规则批改：关键词命中 + 结构、语言、论证检查，不等同于人工阅卷。分数用于判断“要点漏没漏、结构顺不顺”，不作为能力定论。</div></div></div>'
+
+    +'<div class="actions">'
+      +'<button class="btn btn-primary" data-act="next">下一题</button>'
+      +'<button class="btn" data-act="retry">重写本题</button>'
+      +'<button class="btn" data-act="ref">只看参考答案</button>'
+      +'<button class="btn" data-go="history">查看记录</button>'
+    +'</div>';
+
+  $('#view-result').scrollTop = 0;
+  window.scrollTo({top:0,behavior:'auto'});
+}
+
+function fmtSec(s){ if(!s && s!==0) return '—'; return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+
+function markCopy(text, mats){
+  const clean = s => String(s||'').replace(/[\s，。、；：！？“”‘’（）()《》\-—…·,.;:!?"']/g,'');
+  const mc = (mats||[]).map(clean);
+  return String(text).split(/([。；！？\n])/).map(seg=>{
+    const c = clean(seg);
+    if(c.length>=22 && mc.some(m=>m.includes(c))){
+      return '<span class="mark">'+esc(seg)+'</span>';
+    }
+    return esc(seg);
+  }).join('');
+}
+
+/* ============================================================
+   提交 / 记录
+   ============================================================ */
+function submit(){
+  const q = currentQ();
+  const text = $('#answer').value.trim();
+  if(nchars(text) < 25){
+    toast('先写点内容再提交：哪怕只把要点分条列出来，也能得到要点比对。');
+    $('#answer').focus();
+    return;
+  }
+  const r = evaluate(q,text);
+  const rec = {qid:q.id, set:state.setIdx, q:state.qIdx, title:q.typeName+' · '+currentSet().name, total:r.total, score:q.score, sec:state.sec, chars:r.chars, ts:Date.now(), snap:text};
+  store.records.push(rec); if(store.records.length>120) store.records.shift();
+  store.answers[q.id] = text;
+  persist();
+  stopTimer();
+  state.last = r;
+  go('result');
+  renderResult(r, rec);
+}
+
+function nextQuestion(){
+  const s = currentSet();
+  if(state.qIdx < s.questions.length-1){ loadQuestion(state.setIdx, state.qIdx+1); return; }
+  if(state.setIdx < BANK.length-1){ loadQuestion(state.setIdx+1,0); return; }
+  loadQuestion(0,0);
+}
+
+/* 记录页 */
+function renderHistory(){
+  const rs = store.records;
+  const n = rs.length;
+  const avg = n? Math.round(rs.reduce((a,r)=>a+r.total/r.score,0)/n*100):0;
+  const best = n? Math.max.apply(null, rs.map(r=>r.total)) : 0;
+  $('#stats').innerHTML =
+    '<div class="stat"><div class="k">练习次数</div><div class="v">'+n+'<small> 次</small></div></div>'
+    +'<div class="stat"><div class="k">平均得分率</div><div class="v">'+avg+'<small>%</small></div></div>'
+    +'<div class="stat"><div class="k">最高单题分</div><div class="v">'+best+'<small> 分</small></div></div>';
+
+  /* 趋势 */
+  const last = rs.slice(-14);
+  if(last.length<2){
+    $('#trendbox').innerHTML = '<div class="empty"><strong>还没有形成曲线</strong>完成两次以上批改，就能看到分数走向。建议同一道题隔几天重写一次，对比要点覆盖数。</div>';
+  }else{
+    const W=600,H=170,padL=34,padR=14,padT=14,padB=26;
+    const x = i => padL + (W-padL-padR)*(i/(last.length-1));
+    const y = v => padT + (H-padT-padB)*(1-v);
+    const pts = last.map((r,i)=>[x(i), y(r.total/r.score)]);
+    const path = pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+    const grid = [0.6,0.8,1].map(g=>'<line x1="'+padL+'" x2="'+(W-padR)+'" y1="'+y(g)+'" y2="'+y(g)+'" stroke="#DDDED4" stroke-width="1"/><text x="'+(padL-6)+'" y="'+(y(g)+4)+'" text-anchor="end" font-size="10" fill="#717A73">'+Math.round(g*100)+'%</text>').join('');
+    const dots = pts.map((p,i)=>{
+      const r0 = last[i];
+      const col = r0.total/r0.score>=0.72?'#2E4B3F':'#B03B2E';
+      return '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.2" fill="'+col+'"><title>'+esc(r0.title)+' '+r0.total+'/'+r0.score+'</title></circle>';
+    }).join('');
+    $('#trendbox').innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="近期得分率趋势">'+grid
+      +'<path d="'+path+'" fill="none" stroke="#2E4B3F" stroke-width="1.6" opacity=".8"/>'+dots+'</svg>'
+      +'<div style="font-size:11.5px;color:#717A73;padding:2px 6px 8px">横轴为最近 '+last.length+' 次批改，纵轴为得分率；绿点≥72%，红点低于及格线。</div>';
+  }
+
+  if(!n){
+    $('#logList').innerHTML = '<div class="empty"><strong>还没有批改记录</strong>做完第一题并提交，这里会自动留档。<br>记录只保存在你这台设备的浏览器里。</div>';
+    return;
+  }
+  $('#logList').innerHTML = rs.slice().reverse().map((r,idx)=>{
+    const pct = Math.round(r.total/r.score*100);
+    return '<div class="logrow" data-rec="'+(n-1-idx)+'">'
+      +'<div><div class="t">'+esc(r.title)+'</div><div class="m">'+new Date(r.ts).toLocaleString('zh-CN',{hour12:false})+' · '+r.chars+'字 · '+fmtSec(r.sec)+'</div>'
+      +'<div class="logbar"><i style="width:'+pct+'%"></i></div></div>'
+      +'<div class="s'+(pct>=72?' ok':'')+'">'+r.total+'<span style="font-size:12px;color:#717A73">/'+r.score+'</span></div></div>';
+  }).join('');
+}
+
+/* 方法库 */
+function renderMethods(){
+  if(!$('#methodCats').dataset.init){
+    const cats = {};
+    METHODS.forEach(m=>cats[m.cat]=(cats[m.cat]||0)+1);
+    $('#methodCats').innerHTML = '<button class="chip" data-cat="all" aria-pressed="true">全部 '+METHODS.length+'</button>'
+      + Object.keys(cats).map(c=>'<button class="chip" data-cat="'+esc(c)+'" aria-pressed="false">'+esc(c)+' '+cats[c]+'</button>').join('');
+    $('#methodCats').dataset.init='1';
+  }
+  drawMethods();
+}
+function drawMethods(){
+  const kw = norm($('#methodSearch').value);
+  const cat = ($('#methodCats').querySelector('[aria-pressed="true"]')||{}).dataset?.cat || 'all';
+  const list = METHODS.filter(m=>{
+    if(cat!=='all' && m.cat!==cat) return false;
+    if(!kw) return true;
+    return norm(m.id+m.name+m.sub+m.cat).includes(kw);
+  });
+  $('#methodCount').textContent = '共 '+list.length+' 条'+(kw?'（关键词：'+$('#methodSearch').value+'）':'');
+  $('#methodList').innerHTML = list.length ? list.map(m=>{
+    const how = HOW[m.id];
+    return '<div class="mrow" data-mid="'+esc(m.id)+'"><span class="id">'+esc(m.id)+'</span>'
+      +'<div><div class="nm">'+esc(m.name)+'</div><div class="sb">'+esc(m.cat)+' · '+esc(m.sub)+'</div>'
+      +(how?'<div class="how">'+esc(how.how)+(how.ex?'<br><span style="color:#717A73">例：'+esc(how.ex)+'</span>':'')+'</div>':'<div class="how">用法见《方法总表》：'+esc(m.name)+'。写作时先定场景，再套结构，最后把例证换成本题材料。</div>')
+      +'</div></div>';
+  }).join('') : '<div class="empty"><strong>没有匹配的条目</strong>换个关键词，如“开头”“对策”“豹尾”。</div>';
+}
+
+/* ============================================================
+   视图切换与事件
+   ============================================================ */
+function go(v){
+  state.view = v;
+  $$('.view').forEach(el=>el.classList.remove('on'));
+  const el = $('#view-'+v); if(el) el.classList.add('on');
+  $$('.navbtn').forEach(b=>b.setAttribute('aria-current', b.dataset.go===v?'true':'false'));
+  window.scrollTo({top:0,behavior:'auto'});
+  if(v==='history') renderHistory();
+  if(v==='methods') renderMethods();
+  if(v==='practice'){ const ta=$('#answer'); if(ta && document.activeElement!==ta){} }
+}
+
+function toast(msg){
+  let el = $('#toast');
+  if(!el){
+    el = document.createElement('div'); el.id='toast';
+    el.style.cssText='position:fixed;left:50%;bottom:26px;transform:translateX(-50%);max-width:88vw;background:#1B1F1C;color:#FCFCF8;font-size:13px;line-height:1.6;padding:9px 14px;border-radius:2px;z-index:80;box-shadow:0 4px 16px rgba(0,0,0,.18);opacity:0;transition:opacity .2s';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity='1';
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>{el.style.opacity='0';},2600);
+}
+
+document.addEventListener('click', e=>{
+  const t = e.target.closest('[data-go],[data-set-open],[data-set],[data-jump],[data-cat],[data-rec],[data-act],[data-mid]');
+  if(!t) return;
+
+  if(t.dataset.go){
+    if(t.dataset.go==='practice'){
+      go('practice');
+      if(t.classList.contains('navbtn')) openShelf();
+    } else go(t.dataset.go);
+    return;
+  }
+  if(t.hasAttribute('data-set-open')){
+    const si = +t.dataset.setOpen;
+    const card = t.parentElement;
+    const isOpen = card.classList.contains('on');
+    $$('.setcard').forEach(c=>c.classList.remove('on'));
+    if(!isOpen){ card.classList.add('on'); loadQuestion(si,0,true); }
+    return;
+  }
+  if(t.hasAttribute('data-set')){
+    loadQuestion(+t.dataset.set, +t.dataset.q); return;
+  }
+  if(t.hasAttribute('data-jump')){
+    loadQuestion(state.setIdx, +t.dataset.jump); return;
+  }
+  if(t.dataset.act){
+    if(t.dataset.act==='next'){ nextQuestion(); return; }
+    if(t.dataset.act==='retry'){ go('practice'); startTimer(); $('#answer').focus(); return; }
+    if(t.dataset.act==='back'){ go('practice'); return; }
+    if(t.dataset.act==='ref'){
+      const rc = $('#refCard'); if(rc) rc.scrollIntoView({behavior:'smooth',block:'start'}); return;
+    }
+    return;
+  }
+  if(t.dataset.rec){
+    const rec = store.records[+t.dataset.rec];
+    if(!rec) return;
+    const si = rec.set, qi = rec.q;
+    loadQuestion(si,qi,true);
+    const q = currentQ();
+    const r = evaluate(q, rec.snap||'');
+    go('result'); renderResult(r, rec);
+    return;
+  }
+  if(t.dataset.cat){
+    $$('#methodCats .chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+    t.setAttribute('aria-pressed','true');
+    drawMethods(); return;
+  }
+  if(t.dataset.mid){
+    t.classList.toggle('open'); return;
+  }
+});
+
+document.addEventListener('input', e=>{
+  if(e.target.id==='answer'){
+    const q = currentQ();
+    store.answers[q.id] = e.target.value;
+    updateCount(); persist();
+  }
+  if(e.target.id==='methodSearch') drawMethods();
+});
+
+$('#submitBtn').addEventListener('click', submit);
+$('#scrim').addEventListener('click', closeShelf);
+$('#closeShelf').addEventListener('click', closeShelf);
+$('#exportBtn').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify({exportedAt:new Date().toISOString(), records:store.records, answers:store.answers},null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'shenlun-records-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),3000);
+  toast('已导出记录 JSON。');
+});
+
+$$('.mtab').forEach(b=>b.addEventListener('click',()=>{
+  $$('.mtab').forEach(x=>x.setAttribute('aria-selected','false'));
+  b.setAttribute('aria-selected','true');
+  $('#paneMaterial').classList.toggle('on', b.dataset.pane==='material');
+  $('#paneDesk').classList.toggle('on', b.dataset.pane==='desk');
+}));
+
+document.addEventListener('keydown', e=>{
+  if((e.ctrlKey||e.metaKey) && e.key==='Enter'){ e.preventDefault(); if(state.view==='practice') submit(); }
+});
+
+/* 初始化 */
+loadQuestion(0,0,true);
+go('practice');
+renderShelf();
+</script>
+
+</body>
+</html>
