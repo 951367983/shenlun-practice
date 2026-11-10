@@ -533,6 +533,58 @@ main{padding:0}
   body{background:#fff}
   .card,.verdict{border-color:#bbb;break-inside:avoid}
 }
+
+/* ===== 拉→夯 逐层夯句 ===== */
+.lift-intro{border:1px solid var(--line);background:var(--sheet);padding:14px 16px;margin-bottom:14px}
+.lift-intro h2{font-family:var(--serif);font-size:16px;margin:0 0 6px;letter-spacing:.05em}
+.lift-intro p{margin:0;font-size:13px;line-height:1.8;color:var(--ink-2)}
+.lift-intro .quote{font-size:12px;color:var(--muted);margin-top:6px}
+.rawl{display:flex;gap:10px;align-items:flex-start;margin:14px 0 0;padding:12px 13px;border:1px solid var(--line);background:var(--sheettwo)}
+.rawl .tag{flex:none;font-size:11px;color:var(--seal);border:1px solid var(--seal-soft);background:#FBF1EF;padding:1px 6px;margin-top:2px}
+.rawl .txt{font-family:var(--serif);font-size:14.5px;line-height:1.85;color:var(--muted);text-decoration:line-through;text-decoration-color:var(--seal-soft)}
+.rawl .txt b{color:var(--ink);text-decoration:none}
+.lift-step-row{margin-top:10px}
+.lift-head{display:flex;gap:9px;align-items:baseline}
+.lift-num{flex:none;font-family:var(--serif);font-size:13px;color:var(--seal);border:1px solid var(--seal-soft);padding:1px 6px}
+.lift-name{font-family:var(--serif);font-size:14.5px;font-weight:700;letter-spacing:.03em}
+.lift-why{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.75}
+.lift-out{margin-top:7px;padding:10px 12px;background:var(--sheet);border:1px solid var(--line-soft);border-left:2px solid var(--pine);font-family:var(--serif);font-size:14.5px;line-height:1.95}
+.lift-out .add{background:#F2F5EE;box-shadow:inset 0 0 0 1px #E3E8DC;padding:0 1px}
+.lift-final{margin-top:14px;padding:13px 14px;background:var(--pine);color:#F7F8F2}
+.lift-final .ft{font-size:11.5px;letter-spacing:.08em;color:#C8D3C6;margin-bottom:5px}
+.lift-final .fx{font-family:var(--serif);font-size:15px;line-height:2;color:#fff}
+.lift-move{margin-top:9px;font-size:12.5px;color:var(--ink-2);border-left:2px solid var(--gold);padding-left:9px;line-height:1.8}
+.lift-ctrl{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.lift-card{background:var(--sheet);border:1px solid var(--line);margin-bottom:12px}
+.lift-card.on{border-color:var(--pine)}
+.lift-card-h{display:flex;align-items:center;gap:10px;padding:12px 13px;background:var(--sheettwo);border-bottom:1px solid var(--line-soft);cursor:pointer}
+.lift-card-h .k{font-family:var(--serif);font-size:13px;color:var(--seal);border:1px solid var(--seal-soft);padding:1px 6px;flex:none}
+.lift-card-h .nm{font-family:var(--serif);font-size:15.5px;font-weight:700;margin:0;letter-spacing:.04em}
+.lift-card-h .sb{font-size:11.5px;color:var(--muted)}
+.lift-card-h .rg{margin-left:auto;font-size:12px;color:var(--muted);flex:none}
+.lift-body{padding:13px;display:none}
+.lift-card.on .lift-body{display:block}
+.lift-body .hidden-step{display:none}
+.tonebox{background:var(--sheet);border:1px solid var(--line);padding:14px 16px;margin-top:16px}
+.tonebox h2{font-family:var(--serif);font-size:15px;margin:0 0 4px;letter-spacing:.05em}
+.tonebox p.sub{margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+.tonebox textarea{width:100%;min-height:82px;padding:10px 11px;border:1px solid var(--line);background:var(--sheettwo);font-family:var(--serif);font-size:15px;line-height:1.9;color:var(--ink);border-radius:0;resize:vertical}
+.tonebox textarea:focus{outline:none;border-color:var(--pine);background:#fff}
+.toneout{margin-top:11px}
+.tline{display:flex;gap:9px;padding:8px 0;border-bottom:1px dashed var(--line-soft);align-items:flex-start}
+.tline .lb{flex:none;width:74px;font-size:12px;color:var(--muted)}
+.tline .vv{font-size:13px;line-height:1.75;color:var(--ink-2)}
+.tline .vv b{color:var(--ink)}
+.swap{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swap span{font-size:12px;background:var(--sheettwo);border:1px solid var(--line-soft);padding:2px 7px;color:var(--ink-2)}
+.swap span i{font-style:normal;color:var(--seal)}
+.tpl{font-family:var(--serif);font-size:14px;line-height:2;background:var(--sheettwo);border:1px solid var(--line-soft);padding:10px 12px;margin-top:8px}
+.tpl em{font-style:normal;color:var(--seal);border-bottom:1px dotted var(--seal-soft);padding:0 1px}
+.liftbanner{display:flex;align-items:center;gap:10px;border:1px solid var(--seal-soft);background:#FBF1EF;padding:10px 13px;margin-bottom:12px;cursor:pointer}
+.liftbanner .tt{font-family:var(--serif);font-size:14px;font-weight:700;color:var(--seal)}
+.liftbanner .dd{font-size:12px;color:var(--ink-2)}
+.liftbanner .go{margin-left:auto;font-size:12px;color:var(--seal);flex:none}
+.resultlink{display:inline-block;margin-top:10px;font-size:12.5px;color:var(--seal);border-bottom:1px solid var(--seal-soft);cursor:pointer}
 </style>
 </head>
 <body>
@@ -549,6 +601,7 @@ main{padding:0}
     <nav class="topnav" aria-label="主导航">
       <button class="navbtn" data-go="practice" aria-current="true">题架</button>
       <button class="navbtn" data-go="frame">答题框架</button>
+      <button class="navbtn" data-go="lift">拉→夯</button>
       <button class="navbtn" data-go="history">批改记录</button>
       <button class="navbtn" data-go="methods">方法库</button>
       <span class="timer" id="timer" title="本题作答用时">
@@ -622,6 +675,36 @@ main{padding:0}
         </div>
       </div>
       <div id="frameList"></div>
+      <div class="liftbanner" data-go="lift" style="margin-top:16px">
+        <div><div class="tt">框架会拆了，句子还写不实？</div><div class="dd">到「拉→夯」把一句答案分四步夯实：宾语前置、换词、判断句、加画面。</div></div>
+        <span class="go">进入 →</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 视图：拉→夯 ===== -->
+  <section class="view" id="view-lift">
+    <div class="page">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">一句话怎么“由拉变夯”</h1>
+          <p class="page-desc">“拉”是硬贴：谁干了什么、体现了什么，读着对，但没有逻辑也没有画面。四步夯下来，同一句材料话就能立住。每一步只做一件事，做完再下一步。</p>
+        </div>
+      </div>
+      <div class="lift-intro">
+        <h2>四步是什么</h2>
+        <p><b>①宾语前置</b>：先亮结果，再回溯原因——论证不是叙事，重点是“为什么成立”。<b>②换词升级</b>：动词换成有力度、有质感的词，名词换成有画面的词。<b>③后半句也前置</b>：把“体现了什么”改写成“是……的生动实践”，判断句才有力。<b>④加画面</b>：把抽象的“变好”落到具体场景、具体对比，让人看见。</p>
+        <p class="quote">方法源自「加夜班的文兄」举例论证演示（原例：千万工程→乡村环境），这里换成练习里的常见场景，并补齐对策句、分析句、道理句四种同构写法。</p>
+      </div>
+      <div id="liftList"></div>
+      <div class="tonebox">
+        <h2>改句台</h2>
+        <p class="sub">把你写的一句贴进来，按四步体检：缺哪一步、该换哪些词、套哪个句式。<b>只做提示，不改写你的原意。</b></p>
+        <textarea id="toneInput" placeholder="例：某县推进政务服务改革，改善了营商环境，体现了服务型政府理念。"></textarea>
+        <div class="lift-ctrl"><button class="btn btn-sm btn-primary" id="toneBtn">按四步体检</button><button class="btn btn-sm" id="toneClear">清空</button></div>
+        <div class="toneout" id="toneOut"></div>
+      </div>
     </div>
   </section>
 
@@ -654,6 +737,10 @@ main{padding:0}
           <h1 class="page-title">方法库</h1>
           <p class="page-desc">整理自「加夜班的文兄」209 条框架（WX01–WX209）。点条目看一句话用法；写作卡壳时按场景检索。</p>
         </div>
+      </div>
+      <div class="liftbanner" data-go="lift">
+        <div><div class="tt">句子太“拉”？去夯一遍</div><div class="dd">举例 / 对策 / 分析 / 道理，四种句式各四步，点一步改一步。</div></div>
+        <span class="go">进入 →</span>
       </div>
       <div class="toolsbar">
         <input type="search" class="search" id="methodSearch" placeholder="搜编号或关键词，如 开头、豹尾、四个量、WX29">
@@ -1956,7 +2043,7 @@ BANK.push(
  ],
  questions:[
   {
-   id:'s15q1', type:'gk', typeName:'概括归纳', score:20, min:165, max:230,
+   id:'s15q1', type:'gk', typeName:'概括归纳', score:20, min:160, max:230,
    ask:'根据给定材料，概括当前粮食安全面临的主要问题。',
    req:'要求：全面、准确、有条理；不超过200字。',
    dims:{content:14,structure:3,language:3},
@@ -2589,7 +2676,7 @@ BANK.push(
    tips:['WX130','WX42']
   },
   {
-   id:'s21q2', type:'fx', typeName:'综合分析', score:15, min:220, max:340,
+   id:'s21q2', type:'fx', typeName:'综合分析', score:15, min:210, max:340,
    ask:'有人说“预案不能只挂在墙上”。请谈谈你的理解。',
    req:'要求：观点明确，分析透彻；250字左右。',
    dims:{content:11,structure:2,language:2},
@@ -3532,7 +3619,8 @@ function renderHint(q){
   const box = $('#hintBox');
   if(!box) return;
   box.innerHTML = '<ol>'+tpl.map(t=>'<li>'+esc(t.replace('{D}',dims))+'</li>').join('')+'</ol>'
-    +'<span class="hlink" data-act="frame" data-frame="'+q.type+'">看「'+esc(TYPE_NAME[q.type]||q.typeName)+'」完整框架 →</span>';
+    +'<span class="hlink" data-act="frame" data-frame="'+q.type+'">看「'+esc(TYPE_NAME[q.type]||q.typeName)+'」完整框架 →</span>'
+    +'<span class="hlink" style="margin-left:12px" data-act="lift" data-lift="'+(TYPE_LIFT[q.type]||'ex')+'">句写不出味？看这句怎么夯 →</span>';
   box.hidden = true;
   const b = $('#hintBtn'); b.textContent = '拆解思路'; b.setAttribute('aria-expanded','false');
 }
@@ -3565,6 +3653,133 @@ function loadQuestion(si,qi,silent){
   renderPaper(); renderAsk(); renderShelf();
   if(!silent){ go('practice'); closeShelf(); const pc = $('#paneMaterial'); if(pc) pc.scrollTop=0; }
 }
+
+
+/* ============================================================
+   拉→夯：一句话四步夯实（举例 / 对策 / 分析 / 道理）
+   方法源：「加夜班的文兄」举例论证演示，四步=宾语前置→换词升级→
+   后半句前置→加画面；同一骨架平移到对策句、分析句、道理句。
+   ============================================================ */
+const LIFT = [
+ {k:'ex', name:'举例句', sub:'谁干了什么，体现了什么 → 它是…的答卷', type:'gk/yyw',
+  raw:'某县推进政务服务改革，<s>改善了</s>营商环境，<s>体现了</s>服务型政府理念。',
+  steps:[
+   {t:'宾语前置', why:'陈述句的重点在“谁做了什么”，论证的重点在“结果从哪来”。先把结果提到句首，再回溯原因，逻辑才立起来。',
+    out:'营商环境的<b>改善</b>，是某县政务服务改革<b>带来</b>的成果，<b>体现</b>了服务型政府理念。'},
+   {t:'换词升级', why:'动词决定句子的力度。“改善”太软，“带来”太平；换成有质感的动词，名词换成有画面的词，句子才有筋骨。',
+    out:'营商环境的<b>蝶变跃升</b>，是某县政务服务改革<b>镌刻</b>的<b>改革答卷</b>，<b>彰显</b>了服务型政府理念。'},
+   {t:'后半句也前置', why:'“体现了什么”是叙述，“是……的生动实践”是判断。判断句才像论证，读起来也更结实。',
+    out:'营商环境的蝶变跃升，是某县政务服务改革镌刻的改革答卷，是服务型政府理念的<b>生动实践</b>。'},
+   {t:'加画面', why:'抽象的“变好了”没有说服力。落到具体场景、具体对比，读者才“看见”：变在哪、答卷镌刻在哪、实践铺展在哪。',
+    out:'营商环境的蝶变跃升，是某县政务服务改革镌刻的改革答卷，镌刻在办事大厅一张张“一次办”清单里，是服务型政府理念的生动实践，铺展在车间地头一句句“不用再跑第二趟”里。'}
+  ],
+  final:'营商环境的蝶变跃升，是某县政务服务改革镌刻的改革答卷，镌刻在办事大厅一张张“一次办”清单里，是服务型政府理念的生动实践，铺展在车间地头一句句“不用再跑第二趟”里。',
+  move:'用在概括题、短评、作文的事实句上：材料里的事实先按“主体+做法+结果”压到 40—60 字，再走这四步。四步里最值钱的是第一步和第四步——顺序和画面。'},
+ {k:'dc', name:'对策句', sub:'我们干了什么 → 为什么干、谁干、干到什么程度', type:'dc',
+  raw:'<s>组织人员上门为企业讲政策，帮助完成申报。</s>',
+  steps:[
+   {t:'加靶子', why:'先给动作一个“靶子”：针对什么问题。有了问题，动作才有落点，才不是“为了做事而做事”。',
+    out:'<b>针对政策掌握不及时、申报流程不熟悉的问题</b>，组织人员上门为企业讲政策、帮助完成申报。'},
+   {t:'补一句为什么', why:'把“凭什么这么干”讲出来，措施才有依据：政策更新快、企业人手紧，自己摸索成本高、易出错。',
+    out:'针对政策掌握不及时、申报流程不熟悉的问题，组织人员上门为企业讲政策、帮助完成申报。<b>政策更新快、企业人手紧，靠企业自己摸索成本高、易出错</b>，所以由部门主动送政策上门。'},
+   {t:'落到主体与方式', why:'谁去干、怎么干，必须具体到主体和动作，否则只是一句口号。',
+    out:'<b>由发改、税务抽调骨干组建服务专班</b>，一企一策、清单式辅导，把政策讲到具体条款、把申报讲到具体材料。'},
+   {t:'加时限与结果', why:'可验收的措施才有说服力：多长时间、覆盖多少、压减到什么程度。',
+    out:'每季度覆盖全部规上企业，将平均申报时限由 15 个工作日压缩至 3 个。'}
+  ],
+  final:'针对政策掌握不及时、申报流程不熟悉的问题，由发改、税务抽调骨干组建服务专班，一企一策上门辅导，把政策讲到具体条款、把申报讲到具体材料，每季度覆盖全部规上企业，将平均申报时限压缩至3个工作日。',
+  move:'对策题、作文对策段：一条 = 靶子 + 主体 + 动作 + 落点 + 时限。五件齐了，才叫“可执行”，不是“要加强”。'},
+ {k:'fx', name:'分析句', sub:'这个很重要 → 是什么、从哪来、到哪去', type:'fx',
+  raw:'<s>这个问题很重要，需要高度重视。</s>',
+  steps:[
+   {t:'先定性', why:'第一句必须回答“是什么”，把现象翻译成判断。定性错了，后面全歪。',
+    out:'这<b>不是简单的管理问题，而是治理能力与群众需求之间的错位</b>。'},
+   {t:'加时间轴', why:'向内看自身所处的阶段：过去问“有没有”，现在问“好不好”，矛盾的层次变了。',
+    out:'<b>过去群众问的是“有没有”，现在问的是“好不好”</b>；发展阶段变了，期待也变了，老办法自然不够用。'},
+   {t:'加空间轴', why:'向外看全局：同样的题，各地怎么解，谁先转谁主动。视野一打开，分析就有了比较。',
+    out:'<b>放眼各地，谁先从“管理”转向“服务”，谁就先赢得信任</b>；转型慢的地方，往往是被旧流程拖住了脚。'},
+   {t:'收束到本题', why:'分析不能飘着，最后一句要落回“所以这道题该干什么”。',
+    out:'<b>因此，破题的关键不在加人加钱，而在把服务流程重造一遍</b>。'}
+  ],
+  final:'这不是简单的管理问题，而是治理能力与群众需求之间的错位。过去群众问的是“有没有”，现在问的是“好不好”；放眼各地，谁先从管理转向服务，谁就先赢得信任。因此，破题的关键不在加人加钱，而在把服务流程重造一遍。',
+  move:'综合分析、“谈谈理解”、概括原因都能用：定性 → 时间 → 空间 → 落点。四步走完，比空喊“很重要”多拿 3—4 分。'},
+ {k:'zw', name:'道理句', sub:'X 很重要 → 放在时代里、讲清因果、反面一推', type:'zw',
+  raw:'<s>青年要加强学习，学习很重要。</s>',
+  steps:[
+   {t:'加背景', why:'把道理放进时代背景，重要性才不是“一厢情愿”，而成了“时代要求”。',
+    out:'<b>当代青年生逢伟大时代，肩负光荣使命</b>，学习不再是个人选择，而是时代要求。'},
+   {t:'搭因果链', why:'A→B→C 一路推下去，读者才信这是必然，不是口号。',
+    out:'<b>技术迭代加快、知识半衰期缩短，不学则退，学得慢也是退</b>；本领恐慌不是危言耸听，而是每天都在发生的淘汰。'},
+   {t:'反面假设', why:'“试想，倘若没有……”从反面推，把必要性顶出来，逻辑更有张力。',
+    out:'<b>试想，若安于现状</b>，面对新业态、新工具只能被动应付，机遇来了也接不住。'},
+   {t:'回扣分论点', why:'最后一句必须回到本段观点，别新开话题。',
+    out:'<b>可见，把学习当成一种生活方式，才能在时代浪潮中站稳脚跟</b>。'}
+  ],
+  final:'当代青年生逢伟大时代，肩负光荣使命，学习不再是个人选择，而是时代要求。技术迭代加快、知识半衰期缩短，不学则退，学得慢也是退。试想，若安于现状，面对新业态、新工具只能被动应付，机遇来了也接不住。可见，把学习当成一种生活方式，才能在时代浪潮中站稳脚跟。',
+  move:'作文分论点的说理段：背景 → 因果 → 反推 → 回扣。四句一组的骨架背下来，任何分论点都能填。'}
+];
+const TYPE_LIFT = {gk:'ex', fx:'fx', dc:'dc', yyw:'ex', zw:'zw'};
+
+function renderLift(focusK){
+  const st = state.liftReveal || (state.liftReveal = {});
+  const open = state.liftOpen || (state.liftOpen = 'ex');
+  const html = LIFT.map((it,ci)=>{
+    const on = it.k===open;
+    const n = st[it.k]===undefined ? (on?2:0) : st[it.k];
+    const stepsHtml = it.steps.map((s,i)=>{
+      const shown = i < n;
+      return '<div class="lift-step-row" '+(shown?'':'hidden')+' style="'+(shown?'':'display:none')+'">'
+        +'<div class="lift-head"><span class="lift-num">第'+['一','二','三','四'][i]+'步</span>'
+        +'<div><div class="lift-name">'+esc(s.t)+'</div><div class="lift-why">'+esc(s.why)+'</div></div></div>'
+        +'<div class="lift-out">'+s.out+'</div></div>';
+    }).join('');
+    const rest = n < it.steps.length;
+    return '<div class="lift-card'+(on?' on':'')+'" data-lift-card="'+it.k+'">'
+      +'<div class="lift-card-h" data-lift-open="'+it.k+'"><span class="k">'+(ci+1)+'</span>'
+      +'<div><h2 class="nm">'+esc(it.name)+'</h2><div class="sb">'+esc(it.sub)+'</div></div>'
+      +'<span class="rg">'+(on?(rest?(n+'/'+it.steps.length+' 步'):'已完成'):'展开')+'</span></div>'
+      +'<div class="lift-body">'
+      +'<div class="rawl"><span class="tag">拉</span><div class="txt">'+it.raw+'</div></div>'
+      +stepsHtml
+      +(n>=it.steps.length?'<div class="lift-final"><div class="ft">夯 · 终句</div><div class="fx">'+esc(it.final)+'</div></div>':'')
+      +'<div class="lift-ctrl">'
+      +(rest?'<button class="btn btn-sm btn-primary" data-lift-step="'+it.k+'">'+(n===0?'开始第一步':'下一步')+'</button>':'<button class="btn btn-sm" data-lift-reset="'+it.k+'">重走一遍</button>')
+      +'<button class="btn btn-sm" data-lift-all="'+it.k+'">全部展开</button></div>'
+      +'<div class="lift-move"><b>怎么用：</b>'+esc(it.move)+'</div>'
+      +'</div></div>';
+  }).join('');
+  $('#liftList').innerHTML = html;
+  if(focusK){
+    const card = $('#liftList').querySelector('[data-lift-card="'+focusK+'"]');
+    if(card) card.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+/* 改句台：只做体检与提示，不改写原意 */
+const WEAK = {
+ '改善':'蝶变跃升 / 焕然一新', '提高':'跃升 / 抬升', '提升':'跃升 / 提质', '加强':'夯实 / 织密',
+ '促进':'撬动 / 激活', '推动':'撬动 / 牵引', '带来':'镌刻 / 铸就', '体现':'彰显 / 诠释',
+ '说明':'印证 / 昭示', '做好':'做实 / 做细', '搞好':'做实 / 落地'
+};
+function toneCheck(text){
+  const t = (text||'').trim();
+  if(!t) return '<p style="font-size:13px;color:var(--muted)">先贴一句你写的答案，再体检。</p>';
+  const weak = Object.keys(WEAK).filter(w=>t.includes(w));
+  const frontLoaded = /^[^，。]{0,14}(改善|提高|提升|加强|促进|推动|带来|体现|做好|搞好|说明)/.test(t);
+  const isJudge = /是[^。；]{0,30}的(生动实践|时代答卷|改革答卷|成果|图景|注脚|缩影|写照|基石|抓手)/.test(t);
+  const hasScene = /从[^，。]{2,14}到[^，。]{2,14}|在[^，。]{2,14}(里|上|间|中)|[0-9]+|百|千|万/.test(t);
+  const rows = [
+   ['①宾语前置', frontLoaded ? '<b style="color:var(--seal)">待改</b>：句子以“主体+动词”开头，先叙述了谁做了什么。把<b>结果</b>提到句首，再回溯来源。' : '<b style="color:var(--pine)">已像</b>：开头给了结果，语句已是“结果—来源”的顺序。'],
+   ['②换词升级', weak.length ? '发现弱动词：'+weak.map(w=>'<b>'+w+'</b>').join('、')+'。按右表换成有质感的词。' : '<b style="color:var(--pine)">已像</b>：没有检出常用弱动词（仍可再抠一次用词）。'],
+   ['③后半句前置', isJudge ? '<b style="color:var(--pine)">已像</b>：出现了“是……的生动实践/答卷”式判断句。' : '还是“体现了……”。改成<b>“是……的生动实践”</b>，判断句比叙述句结实。'],
+   ['④加画面', hasScene ? '<b style="color:var(--pine)">已像</b>：句中有场景、对比或数字，能“看见”。' : '全是抽象判断。补一处<b>具体场景或前后对比</b>（从……到……；在……里）。']
+  ];
+  const swap = weak.length ? '<div class="swap">'+weak.map(w=>'<span><i>'+w+'</i> → '+WEAK[w]+'</span>').join('')+'</div>' : '';
+  const tpl = '<div class="tpl">套这个骨架：<br><em>【结果】</em>的<em>蝶变跃升</em>，是<em>【主体】</em><em>【动作】</em>镌刻的<em>时代答卷</em>，镌刻在<em>【场景一】</em>，是<em>【理念】</em>的<em>生动实践</em>，铺展在<em>【场景二】</em>。</div>';
+  return rows.map(r=>'<div class="tline"><span class="lb">'+r[0]+'</span><span class="vv">'+r[1]+'</span></div>').join('')+swap+tpl
+    +'<p style="font-size:12px;color:var(--muted);margin:8px 0 0">体检只判断“像不像论证”，不替代你的内容判断；要点是否踩中，仍以批改单为准。</p>';
+}
+
 
 function renderFrames(){
   $('#frameList').innerHTML = '<div class="frames">'+ FRAMES.map((f,i)=>
@@ -3648,7 +3863,9 @@ function renderResult(r, rec){
       +'<div class="card-body">'+pointsHtml+'</div></div>'
 
     +'<div class="card"><div class="card-head"><h2 class="card-h">改进建议</h2><span class="card-note">按失分影响排序</span></div>'
-      +'<div class="card-body"><ul class="advice">'+advHtml+'</ul></div></div>'
+      +'<div class="card-body"><ul class="advice">'+advHtml+'</ul>'
+      +'<div class="resultlink" data-act="lift" data-lift="'+(TYPE_LIFT[q.type]||'ex')+'">照着改还是“拉”？把一句拿去夯四步 →</div>'
+      +'</div></div>'
 
     +'<div class="card" id="refCard"><div class="card-head"><h2 class="card-h">参考答案</h2><span class="card-note">示范文本，非唯一标准</span></div>'
       +'<div class="card-body">'
@@ -3845,6 +4062,7 @@ function go(v){
   if(v==='history') renderHistory();
   if(v==='methods') renderMethods();
   if(v==='frame') renderFrames();
+  if(v==='lift') renderLift();
   if(v==='practice'){ const ta=$('#answer'); if(ta && document.activeElement!==ta){} }
 }
 
@@ -3870,7 +4088,7 @@ document.addEventListener('click', e=>{
     b.setAttribute('aria-expanded', String(open));
     return;
   }
-  const t = e.target.closest('[data-go],[data-set-open],[data-set],[data-jump],[data-cat],[data-rec],[data-act],[data-mid],[data-ftype],[data-frame-toggle]');
+  const t = e.target.closest('[data-go],[data-set-open],[data-set],[data-jump],[data-cat],[data-rec],[data-act],[data-mid],[data-ftype],[data-frame-toggle],[data-lift-open],[data-lift-step],[data-lift-all],[data-lift-reset]');
   if(!t) return;
 
   if(t.dataset.ftype){
@@ -3880,6 +4098,36 @@ document.addEventListener('click', e=>{
   if(t.dataset.frameToggle){
     const card = t.closest('.frame');
     card.classList.toggle('on');
+    return;
+  }
+  if(t.dataset.liftOpen!==undefined && t.classList.contains('lift-card-h')){
+    const k = t.dataset.liftOpen;
+    if(state.liftOpen===k){ state.liftOpen=''; } else { state.liftOpen=k; if(state.liftReveal) delete state.liftReveal[k]; if(!state.liftReveal) state.liftReveal={}; }
+    renderLift(); return;
+  }
+  if(t.dataset.liftStep){
+    const k = t.dataset.liftStep;
+    const it = LIFT.find(x=>x.k===k);
+    const cur = state.liftReveal[k]===undefined ? 2 : state.liftReveal[k];
+    state.liftReveal[k] = Math.min(cur+1, it.steps.length);
+    renderLift(); return;
+  }
+  if(t.dataset.liftAll){
+    const k = t.dataset.liftAll;
+    const it = LIFT.find(x=>x.k===k);
+    state.liftReveal[k] = it.steps.length;
+    state.liftOpen = k;
+    renderLift(); return;
+  }
+  if(t.dataset.liftReset){
+    state.liftReveal[t.dataset.liftReset] = 0;
+    renderLift(); return;
+  }
+  if(t.dataset.act==='lift'){
+    go('lift');
+    const k = t.dataset.lift||'ex';
+    state.liftOpen = k; state.liftReveal[k] = 2;
+    renderLift(k);
     return;
   }
 
@@ -3948,6 +4196,16 @@ document.addEventListener('click', e=>{
   }
   if(t.dataset.mid){
     t.classList.toggle('open'); return;
+  }
+});
+
+document.addEventListener('click', e=>{
+  if(e.target.closest('#toneBtn')){
+    $('#toneOut').innerHTML = toneCheck($('#toneInput').value);
+    return;
+  }
+  if(e.target.closest('#toneClear')){
+    $('#toneInput').value=''; $('#toneOut').innerHTML=''; return;
   }
 });
 
