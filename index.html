@@ -624,6 +624,49 @@ main{padding:0}
 .secbar .sb-t{font-family:var(--serif);font-size:16px;font-weight:700;letter-spacing:.05em}
 .secbar .sb-d{font-size:12.5px;color:var(--ink-2);line-height:1.75;margin-top:4px}
 .jump{display:inline-block;margin-top:10px;font-size:12.5px;color:var(--seal);border-bottom:1px solid var(--seal-soft);cursor:pointer}
+
+/* ===== 逻辑逼词 ===== */
+.topnav{overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.topnav::-webkit-scrollbar{display:none}
+.navbtn{white-space:nowrap;flex:none}
+.bid-q{border:1px solid var(--line);background:var(--sheet);padding:14px 15px;margin-bottom:16px;border-top:2px solid var(--seal)}
+.bq-t{font-family:var(--serif);font-size:17px;font-weight:700;letter-spacing:.03em}
+.bq-q{font-size:13.5px;line-height:1.85;color:var(--ink-2);margin:7px 0 0}
+.bq-s{font-size:13.5px;line-height:1.85;margin:9px 0 0;padding:8px 10px;background:var(--sheettwo);border-left:2px solid var(--pine)}
+.bidsteps{list-style:none;padding:0;margin:0 0 6px}
+.bidstep{display:grid;grid-template-columns:34px 1fr;column-gap:8px;padding:12px 0;border-bottom:1px dotted var(--line-soft)}
+.bs-no{grid-row:1 / span 2;width:26px;height:26px;border:1px solid var(--seal-soft);color:var(--seal);background:#FBF1EF;display:grid;place-items:center;font-family:var(--serif);font-size:13px}
+.bs-h{font-family:var(--serif);font-size:15px;font-weight:700;line-height:1.6;letter-spacing:.02em}
+.bs-body{margin:6px 0 0;padding:0 0 0 2px;list-style:none}
+.bs-body li{font-size:13.5px;line-height:1.9;color:var(--ink-2);padding-left:13px;position:relative;margin-bottom:3px}
+.bs-body li::before{content:"·";position:absolute;left:2px;color:var(--seal)}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);background:var(--sheet);margin:14px 0 4px}
+.bidtab{width:100%;min-width:560px;border-collapse:collapse;table-layout:fixed}
+.bidtab th,.bidtab td{border-bottom:1px solid var(--line-soft);padding:9px 10px;font-size:12.5px;line-height:1.7;vertical-align:top;text-align:left}
+.bidtab th{background:var(--sheettwo);font-weight:600;color:var(--ink);font-family:var(--serif)}
+.bidtab td:last-child{color:var(--seal)}
+.bidans{margin:16px 0 0;border:1px solid var(--line);background:var(--sheet);padding:13px 14px}
+.bidans h3{font-family:var(--serif);font-size:15px;margin:0 0 9px;letter-spacing:.03em}
+.ba-row{display:grid;grid-template-columns:56px 1fr;gap:8px;align-items:start;padding:6px 0;border-bottom:1px dotted var(--line-soft)}
+.ba-row:last-child{border-bottom:0}
+.ba-tag{font-size:11px;color:var(--seal);border:1px solid var(--seal-soft);background:#FBF1EF;text-align:center;padding:1px 0}
+.ba-row p{font-size:13px;line-height:1.9;margin:0;color:var(--ink)}
+.slotgrid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+@media (min-width:720px){.slotgrid{grid-template-columns:1fr 1fr}}
+.slotcard{border:1px solid var(--line);background:var(--sheet);padding:12px 13px}
+.sc-k{font-family:var(--serif);font-size:15px;font-weight:700;letter-spacing:.04em}
+.sc-row{margin-top:8px}
+.sc-row b,.sc-trap b{font-size:11.5px;color:var(--muted);letter-spacing:.06em}
+.sc-row p{margin:3px 0 0;font-size:12.5px;line-height:1.8;color:var(--ink-2)}
+.slt{display:inline-block;margin:2px 4px 2px 0;padding:1px 7px;border:1px solid var(--line);background:var(--sheettwo);font-size:12px;color:var(--ink)}
+.sc-trap{margin-top:9px;padding-top:8px;border-top:1px dotted var(--line-soft)}
+.sc-trap p{margin:3px 0 0;font-size:12.5px;line-height:1.8;color:var(--seal)}
+.thgrid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+@media (min-width:720px){.thgrid{grid-template-columns:1fr 1fr}}
+.thcard{border:1px solid var(--line);background:var(--sheet);padding:12px 13px}
+.th-n{font-family:var(--serif);font-size:14.5px;font-weight:700;letter-spacing:.03em}
+.th-u{font-size:12.5px;line-height:1.85;color:var(--ink-2);margin-top:6px}
+.th-c{font-size:12.5px;line-height:1.8;color:var(--seal);margin-top:8px;border-top:1px dotted var(--line-soft);padding-top:7px}
 </style>
 </head>
 <body>
@@ -640,6 +683,7 @@ main{padding:0}
     <nav class="topnav" aria-label="主导航">
       <button class="navbtn" data-go="practice" aria-current="true">题架</button>
       <button class="navbtn" data-go="frame">答题框架</button>
+      <button class="navbtn" data-go="bid">逻辑逼词</button>
       <button class="navbtn" data-go="lift">拉→夯</button>
       <button class="navbtn" data-go="history">批改记录</button>
       <button class="navbtn" data-go="methods">方法库</button>
@@ -714,6 +758,10 @@ main{padding:0}
         </div>
       </div>
       <div id="frameList"></div>
+      <div class="liftbanner" data-act="bid" style="margin-top:16px">
+        <div><div class="tt">框架是空的，材料里的点怎么填进去？</div><div class="dd">到「逻辑逼词」看一道综合分析怎么立判准、定槽位、把材料逼进槽里。</div></div>
+        <span class="go">进入 →</span>
+      </div>
       <div class="liftbanner" data-go="lift" style="margin-top:16px">
         <div><div class="tt">框架会拆了，句子还写不实？</div><div class="dd">到「拉→夯」把一句答案分四步夯实：宾语前置、换词、判断句、加画面。</div></div>
         <span class="go">进入 →</span>
@@ -750,6 +798,26 @@ main{padding:0}
         <div class="lift-ctrl"><button class="btn btn-sm btn-primary" id="toneBtn">按四步体检</button><button class="btn btn-sm" id="toneClear">清空</button></div>
         <div class="toneout" id="toneOut"></div>
       </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 视图：逻辑逼词 ===== -->
+  <section class="view" id="view-bid">
+    <div class="page">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">逻辑逼词：关键词不是找出来的</h1>
+          <p class="page-desc">先立判准，再定槽位，带着目的刷材料；关键词是逻辑成立后留下的落点标记，不是入口。顺序：逼词取点 → 分条落位 → 最后夯句。</p>
+        </div>
+      </div>
+      <div class="bid-q" style="border-top-color:var(--pine)">
+        <div class="bq-t">为什么先讲这个</div>
+        <p class="bq-s" style="border-left-color:var(--seal)">批改台里的“关键词命中”是模拟阅卷的判分口径，不是作答方法。作答要先有判准和槽位，再让材料往槽里落；否则词扫得再多，也只是把论据堆在答案里。</p>
+      </div>
+      <div id="bidDemo"></div>
+      <div id="bidSlots"></div>
+      <div id="bidTheory"></div>
     </div>
   </section>
 
@@ -4146,6 +4214,45 @@ function renderPlay(){
   }).join('');
 }
 
+
+/* ===== 逻辑逼词：数据 ===== */
+const BID = {"demo": {"title": "C市三家制造业老字号的“守”与“丢”", "question": "给定材料中，C市三家制造业老字号对传统工艺做出了不同选择。请谈谈你的看法。（综合分析・250字左右）", "standard": "判准不是“守”或“丢”，而是“能否为企业创造价值、推动发展”。题干与材料共同给出的标准只有这一条。", "steps": [{"n": "1", "h": "先立判准：题干要的不是站队，是一把尺子", "body": ["题干问“该不该丢”，本质是让你给出判断标准；标准不明，看到“成本高”就判该丢、看到“文化”就判该守，必然选边站。", "判准不能自造：题干里“传统工艺”“老字号”“发展”三个词，把标准指向“能否创造价值、推动发展”。", "先排掉两把假尺子：情怀（老东西不能丢）、纯效率（成本高就该丢）。假尺子一立，三个案例就会被读成三个孤立故事。"]}, {"n": "2", "h": "再定槽位：把答案的形状先画出来", "body": ["综合分析固定三槽：定性（判准是什么）→ 印证（逐案填进去）→ 结论（边界与做法）。", "三则材料正好一人一槽；建厂时间、产值、荣誉这类背景只能当论据，不能当要点。", "槽位先定，读材料才有“目的”——每一则都在回答“它印证判准的哪一面”。"]}, {"n": "3", "h": "带着槽刷材料：让材料往槽里落", "body": ["每则问两句：它在回答判准的哪一面？它给的是结论，还是证据？", "老姜剪刀的“成本高、效率低、被不锈钢替代”是证据，“可替代的该丢”是结论；答案要写结论，证据用来支撑。", "填不进槽的段落，标成背景或干扰，不要在答案里复述——复述材料是最常见的失分。"]}, {"n": "4", "h": "反验：把“逼”出来的东西再逼回原句", "body": ["三查：有没有材料原句兜底；有没有把论据当论点；结论有没有超出判准。", "兴隆家具若只写“传统有价值”就收笔，只填了半个槽，必须补上“压缩传统→客诉上升→破产清算”的因果链。", "三家里只要有任意一家解释不通，说明判准立错了，要回题干重立，而不是硬圆。"]}, {"n": "5", "h": "最后才落笔：先落位，再夯句", "body": ["顺序是提取→分条→表达；四套夯法只在最后一步用，改不动要点。", "把“老姜剪刀丢了传统”改成“可替代的传统该丢”，是把论据抬成判断，不是换个漂亮词。", "每写完一句，回头看一眼它填的哪个槽；填不出槽的句子，删。"]}], "table": [{"c": "老姜剪刀", "craft": "千层钢，手工锻打", "result": "成本高、效率低，被不锈钢替代；转现代化后扭亏为盈", "slot": "印证①·该丢（可替代、阻碍发展）"}, {"c": "兴隆家具", "craft": "榫卯结构", "result": "卖的是文化价值与情感认同；传统压到15%后客诉飙升、破产清算", "slot": "印证②·该守（不可替代的核心）"}, {"c": "名誉丝绸", "craft": "手工织造", "result": "手工成本是机器18倍；70%产能供大众、30%做高端，500欧限量丝巾售罄", "slot": "印证③·守正创新（扬弃）"}], "answer": [{"tag": "定性", "s": "三家老字号的取舍，不能简单以守或丢来判断，标准只有一条：是否有利于企业创造价值、推动发展。"}, {"tag": "印证①", "s": "老姜剪刀的千层钢成本高、效率低，被不锈钢替代，果断舍弃后转向现代化，扭亏为盈，说明阻碍发展、可被替代的传统该丢。"}, {"tag": "印证②", "s": "兴隆家具的榫卯承载的是文化价值与情感认同，郑经理把传统压到15%，等于自断根基，客诉上升直至破产，说明不可替代的核心必须守。"}, {"tag": "印证③", "s": "名誉丝绸既不拒现代，也不丢手工，七成产能面向大众、三成产能做高端，限量丝巾走出国门，说明守正与创新可以在更高层面统一。"}, {"tag": "结论", "s": "可见，丢与守不是对立的两端，而是以发展为准绳的扬弃：可替代的果断更新，不可替代的坚定守住，在扬弃中实现守正创新。"}]}, "slots": [{"k": "gk", "name": "概括归纳", "crit": "题干限定的对象与范围：问“问题”就只取负面，问“做法”就只取动作", "slots": ["主体", "维度（表现／原因／做法／成效）", "结果或程度"], "trap": "把论据当要点、把背景当问题，一条要点写成一句话的复述"}, {"k": "fx", "name": "综合分析", "crit": "题干要求评价的那把尺子（观点、标准、价值取向）", "slots": ["定性（判准是什么）", "印证（分主体、分层次逐条填）", "结论（边界、启示、做法）"], "trap": "各打五十大板和稀泥；只贴“辩证看待”的标签，不给论证"}, {"k": "dc", "name": "对策建议", "crit": "问题导向＋可行性：每条措施都要能对应一个具体问题", "slots": ["靶子（针对什么问题）", "主体（谁来干）", "动作（干什么）", "落点（达到什么效果）", "约束（时限、责任、经费）"], "trap": "只喊“加强领导”“提高认识”，没有动作和主体"}, {"k": "yyw", "name": "应用文", "crit": "文种功能与对象身份：写给谁、为什么写、要他做什么", "slots": ["文种与格式", "对象与目的", "事项（背景—做法—要求）", "语体（平实、得体）"], "trap": "写成工作总结；语气与身份错位；格式缺项"}, {"k": "zw", "name": "大作文", "crit": "主题与价值取向：立意必须落在题干给定的关系上", "slots": ["立意", "分论点（2—3个，递进不并列）", "论据（材料＋现实）", "回扣（结尾收回主题）"], "trap": "分论点平行罗列、论据堆砌不分析、结尾喊口号"}], "theory": [{"name": "矛盾分析法（两点论与重点论）", "use": "材料里成对出现的关系：守与丢、效率与公平、保护与发展。先找主要矛盾，再谈兼顾。", "caution": "先分主次再讲兼顾，不是两头都说一句。"}, {"name": "否定之否定（扬弃）", "use": "第三家企业的“守正创新”就是扬弃：不回到传统，也不全盘现代化，而是在更高层面统一。", "caution": "扬弃不是折中，答题时要写出“保留了什麼、舍弃了什麼”。"}, {"name": "质量互变", "use": "判断阶段：垃圾分类三年、减负常态化、治理由乱到治，量变积累到一定程度才有质变。", "caution": "用来解释“为什么现在才见效”，不能替代具体事实。"}, {"name": "矛盾的普遍性与特殊性", "use": "他山之石能否照搬：古城仿建、数字乡村、社区养老，共性可学、特殊性不可复制。", "caution": "先找共性再找差异，落到“因地制宜”的具体条件上。"}]};
+
+function renderBid(){
+
+  const d = BID.demo;
+  $('#bidDemo').innerHTML =
+    '<div class="bid-q"><div class="bq-t">'+esc(d.title)+'</div>'
+    +'<p class="bq-q">'+esc(d.question)+'</p>'
+    +'<p class="bq-s"><b>判准：</b>'+esc(d.standard)+'</p></div>'
+    +'<ol class="bidsteps">'+ d.steps.map(s=>
+        '<li class="bidstep"><div class="bs-h"><span class="bs-no">'+s.n+'</span>'+esc(s.h)+'</div>'
+        +'<ul class="bs-body">'+s.body.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></li>').join('')+'</ol>'
+    +'<div class="tblwrap"><table class="bidtab">'
+    +'<colgroup><col style="width:17%"><col style="width:20%"><col style="width:37%"><col style="width:26%"></colgroup>'
+    +'<thead><tr><th>案例</th><th>传统形态</th><th>结果与材料依据</th><th>填哪个槽</th></tr></thead><tbody>'
+    + d.table.map(r=>'<tr><td>'+esc(r.c)+'</td><td>'+esc(r.craft)+'</td><td>'+esc(r.result)+'</td><td>'+esc(r.slot)+'</td></tr>').join('')
+    +'</tbody></table></div>'
+    +'<div class="bidans"><h3>成文（250字）· 每句标出它填的槽</h3>'
+    + d.answer.map(a=>'<div class="ba-row"><span class="ba-tag">'+esc(a.tag)+'</span><p>'+esc(a.s)+'</p></div>').join('')
+    +'</div>';
+
+  $('#bidSlots').innerHTML =
+    '<div class="secbar"><div class="sb-t">五类题的槽位表</div><div class="sb-d">判准决定取什么，槽位决定分几条。槽位先画好，材料才知道往哪落。</div></div>'
+    +'<div class="slotgrid">'+ BID.slots.map(s=>
+        '<div class="slotcard"><div class="sc-h"><span class="sc-k">'+esc(s.name)+'</span></div>'
+        +'<div class="sc-row"><b>判准</b><p>'+esc(s.crit)+'</p></div>'
+        +'<div class="sc-row"><b>槽位</b><p>'+s.slots.map(x=>'<span class="slt">'+esc(x)+'</span>').join('')+'</p></div>'
+        +'<div class="sc-trap"><b>常见坑</b><p>'+esc(s.trap)+'</p></div></div>').join('')+'</div>';
+
+  $('#bidTheory').innerHTML =
+    '<div class="secbar"><div class="sb-t">理论工具箱 · 马原接口（先留位，逐步补全）</div><div class="sb-d">原理只作分析框架，不替代材料依据：每条原理都要落到材料原句，否则就是贴标签。</div></div>'
+    +'<div class="thgrid">'+ BID.theory.map(t=>
+        '<div class="thcard"><div class="th-n">'+esc(t.name)+'</div>'
+        +'<div class="th-u">'+esc(t.use)+'</div>'
+        +'<div class="th-c"><b>用错的样子：</b>'+esc(t.caution)+'</div></div>').join('')+'</div>';
+}
+
 function renderFrames(){
   $('#frameList').innerHTML = '<div class="frames">'+ FRAMES.map((f,i)=>
     '<section class="frame'+(i===0?' on':'')+'" id="frame-'+f.k+'">'
@@ -4428,6 +4535,7 @@ function go(v){
   if(v==='history') renderHistory();
   if(v==='methods') renderMethods();
   if(v==='frame') renderFrames();
+  if(v==='bid') renderBid();
   if(v==='lift'){ renderLift(); renderPlay(); }
   if(v==='practice'){ const ta=$('#answer'); if(ta && document.activeElement!==ta){} }
 }
@@ -4493,6 +4601,10 @@ document.addEventListener('click', e=>{
   if(t.dataset.liftReset){
     state.liftReveal[t.dataset.liftReset] = 0;
     renderLift(); return;
+  }
+  if(t.dataset.act==='bid'){
+    go('bid');
+    return;
   }
   if(t.dataset.act==='play'){
     go('lift');
