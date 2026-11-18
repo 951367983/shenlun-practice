@@ -667,6 +667,49 @@ main{padding:0}
 .th-n{font-family:var(--serif);font-size:14.5px;font-weight:700;letter-spacing:.03em}
 .th-u{font-size:12.5px;line-height:1.85;color:var(--ink-2);margin-top:6px}
 .th-c{font-size:12.5px;line-height:1.8;color:var(--seal);margin-top:8px;border-top:1px dotted var(--line-soft);padding-top:7px}
+
+/* ===== 切西瓜 ===== */
+.wm-req{display:grid;grid-template-columns:1fr;gap:6px;margin:4px 0 12px}
+.wr-row{display:grid;grid-template-columns:22px 1fr;gap:7px;align-items:start;padding:7px 10px;background:var(--sheettwo);border-left:2px solid var(--pine)}
+.wr-n{font-family:var(--serif);color:var(--seal);font-size:13px}
+.wr-row p{margin:0;font-size:12.5px;line-height:1.75;color:var(--ink)}
+.wm-steps{list-style:none;padding:0;margin:0 0 4px}
+.wm-step{display:grid;grid-template-columns:30px 1fr;column-gap:8px;padding:11px 0;border-bottom:1px dotted var(--line-soft)}
+.ws-no{grid-row:1 / span 2;width:24px;height:24px;border:1px solid var(--line);display:grid;place-items:center;font-family:var(--serif);font-size:12px;color:var(--seal);background:var(--sheet)}
+.ws-h{font-family:var(--serif);font-size:15px;font-weight:700;line-height:1.6}
+.ws-b{margin:5px 0 0;padding:0;list-style:none}
+.ws-b li{font-size:13px;line-height:1.85;color:var(--ink-2);padding-left:12px;position:relative}
+.ws-b li::before{content:"·";position:absolute;left:2px;color:var(--seal)}
+.wmtab{width:100%;min-width:520px;border-collapse:collapse;table-layout:fixed}
+.wmtab th,.wmtab td{border-bottom:1px solid var(--line-soft);padding:8px 10px;font-size:12.5px;line-height:1.7;text-align:left;vertical-align:top}
+.wmtab th{background:var(--sheettwo);font-family:var(--serif);font-weight:600}
+.wmtab b{font-family:var(--serif);font-size:14px}
+.wt{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+.wmdemo{border:1px solid var(--line);background:var(--sheet);margin-top:12px}
+.wd-t{font-family:var(--serif);font-size:15px;font-weight:700;padding:10px 12px;background:var(--sheettwo);border-bottom:1px solid var(--line-soft);letter-spacing:.03em}
+.wd-row{display:grid;grid-template-columns:64px 1fr;gap:8px;padding:9px 12px;border-bottom:1px dotted var(--line-soft)}
+.wd-row.on{background:#F7F4EA}
+.wd-l{font-size:11.5px;color:var(--muted);letter-spacing:.04em;padding-top:2px}
+.wd-c p{margin:0 0 3px;font-size:13px;line-height:1.8;color:var(--ink)}
+.wd-c p:last-child{margin-bottom:0}
+.wd-why,.wd-note{font-size:12.5px;line-height:1.85;padding:9px 12px}
+.wd-why{color:var(--ink-2);border-top:1px solid var(--line-soft);background:var(--sheet)}
+.wd-note{color:var(--seal);background:#FBF6F4}
+.wm-more{margin-top:14px;padding:11px 12px;border:1px dashed var(--line);background:var(--sheet)}
+.wm-more b{font-family:var(--serif);font-size:13.5px}
+.wmp{display:block;font-size:12.5px;line-height:1.8;color:var(--ink-2);margin-top:5px;padding-left:11px;position:relative}
+.wmp::before{content:"—";position:absolute;left:0;color:var(--seal)}
+.wmtool{margin-top:16px;border:1px solid var(--line);background:var(--sheet);padding:13px 14px}
+.wmtool h3{font-family:var(--serif);font-size:15px;margin:0 0 4px}
+.wmtool .sub{font-size:12.5px;color:var(--ink-2);line-height:1.75;margin:0 0 9px}
+.wm-in{display:grid;grid-template-columns:1fr;gap:6px}
+.wm-in textarea{width:100%;box-sizing:border-box;min-height:54px;font-size:15px;line-height:1.7;padding:8px 9px;border:1px solid var(--line);background:var(--sheet);resize:vertical}
+.wmres{list-style:none;padding:0;margin:10px 0 0}
+.wmres li{font-size:12.5px;line-height:1.85;padding:7px 9px;margin-bottom:6px;border-left:2px solid var(--line)}
+.wmres li.ok{border-left-color:var(--pine);background:#F2F5EC}
+.wmres li.warn{border-left-color:var(--seal);background:#FBF1EF;color:#7A2E26}
+.wmtip{font-size:11.5px;color:var(--muted);line-height:1.7;margin:6px 0 0}
+@media (min-width:720px){.wm-in{grid-template-columns:1fr 1fr 1fr}.wm-req{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -791,6 +834,11 @@ main{padding:0}
         <div class="sb-d">概括用减法，分析、对策、应用文用加法。每例都给：拉版原句 → 夯版终句 → 每步动了什么 → 为什么 → 易错。</div>
       </div>
       <div id="playList"></div>
+      <div class="secbar" id="wmAnchor">
+        <div class="sb-t">分论点怎么切：切西瓜法</div>
+        <div class="sb-d">一个主题切成大小相当的三瓣，三个分论点并列。两步硬要求：切得一样大、码得整齐；最后才换词。</div>
+      </div>
+      <div id="wmList"></div>
       <div class="tonebox">
         <h2>改句台</h2>
         <p class="sub">把你写的一句贴进来，按四步体检：缺哪一步、该换哪些词、套哪个句式。<b>只做提示，不改写你的原意。</b></p>
@@ -4218,6 +4266,84 @@ function renderPlay(){
 /* ===== 逻辑逼词：数据 ===== */
 const BID = {"demo": {"title": "C市三家制造业老字号的“守”与“丢”", "question": "给定材料中，C市三家制造业老字号对传统工艺做出了不同选择。请谈谈你的看法。（综合分析・250字左右）", "standard": "判准不是“守”或“丢”，而是“能否为企业创造价值、推动发展”。题干与材料共同给出的标准只有这一条。", "steps": [{"n": "1", "h": "先立判准：题干要的不是站队，是一把尺子", "body": ["题干问“该不该丢”，本质是让你给出判断标准；标准不明，看到“成本高”就判该丢、看到“文化”就判该守，必然选边站。", "判准不能自造：题干里“传统工艺”“老字号”“发展”三个词，把标准指向“能否创造价值、推动发展”。", "先排掉两把假尺子：情怀（老东西不能丢）、纯效率（成本高就该丢）。假尺子一立，三个案例就会被读成三个孤立故事。"]}, {"n": "2", "h": "再定槽位：把答案的形状先画出来", "body": ["综合分析固定三槽：定性（判准是什么）→ 印证（逐案填进去）→ 结论（边界与做法）。", "三则材料正好一人一槽；建厂时间、产值、荣誉这类背景只能当论据，不能当要点。", "槽位先定，读材料才有“目的”——每一则都在回答“它印证判准的哪一面”。"]}, {"n": "3", "h": "带着槽刷材料：让材料往槽里落", "body": ["每则问两句：它在回答判准的哪一面？它给的是结论，还是证据？", "老姜剪刀的“成本高、效率低、被不锈钢替代”是证据，“可替代的该丢”是结论；答案要写结论，证据用来支撑。", "填不进槽的段落，标成背景或干扰，不要在答案里复述——复述材料是最常见的失分。"]}, {"n": "4", "h": "反验：把“逼”出来的东西再逼回原句", "body": ["三查：有没有材料原句兜底；有没有把论据当论点；结论有没有超出判准。", "兴隆家具若只写“传统有价值”就收笔，只填了半个槽，必须补上“压缩传统→客诉上升→破产清算”的因果链。", "三家里只要有任意一家解释不通，说明判准立错了，要回题干重立，而不是硬圆。"]}, {"n": "5", "h": "最后才落笔：先落位，再夯句", "body": ["顺序是提取→分条→表达；四套夯法只在最后一步用，改不动要点。", "把“老姜剪刀丢了传统”改成“可替代的传统该丢”，是把论据抬成判断，不是换个漂亮词。", "每写完一句，回头看一眼它填的哪个槽；填不出槽的句子，删。"]}], "table": [{"c": "老姜剪刀", "craft": "千层钢，手工锻打", "result": "成本高、效率低，被不锈钢替代；转现代化后扭亏为盈", "slot": "印证①·该丢（可替代、阻碍发展）"}, {"c": "兴隆家具", "craft": "榫卯结构", "result": "卖的是文化价值与情感认同；传统压到15%后客诉飙升、破产清算", "slot": "印证②·该守（不可替代的核心）"}, {"c": "名誉丝绸", "craft": "手工织造", "result": "手工成本是机器18倍；70%产能供大众、30%做高端，500欧限量丝巾售罄", "slot": "印证③·守正创新（扬弃）"}], "answer": [{"tag": "定性", "s": "三家老字号的取舍，不能简单以守或丢来判断，标准只有一条：是否有利于企业创造价值、推动发展。"}, {"tag": "印证①", "s": "老姜剪刀的千层钢成本高、效率低，被不锈钢替代，果断舍弃后转向现代化，扭亏为盈，说明阻碍发展、可被替代的传统该丢。"}, {"tag": "印证②", "s": "兴隆家具的榫卯承载的是文化价值与情感认同，郑经理把传统压到15%，等于自断根基，客诉上升直至破产，说明不可替代的核心必须守。"}, {"tag": "印证③", "s": "名誉丝绸既不拒现代，也不丢手工，七成产能面向大众、三成产能做高端，限量丝巾走出国门，说明守正与创新可以在更高层面统一。"}, {"tag": "结论", "s": "可见，丢与守不是对立的两端，而是以发展为准绳的扬弃：可替代的果断更新，不可替代的坚定守住，在扬弃中实现守正创新。"}]}, "slots": [{"k": "gk", "name": "概括归纳", "crit": "题干限定的对象与范围：问“问题”就只取负面，问“做法”就只取动作", "slots": ["主体", "维度（表现／原因／做法／成效）", "结果或程度"], "trap": "把论据当要点、把背景当问题，一条要点写成一句话的复述"}, {"k": "fx", "name": "综合分析", "crit": "题干要求评价的那把尺子（观点、标准、价值取向）", "slots": ["定性（判准是什么）", "印证（分主体、分层次逐条填）", "结论（边界、启示、做法）"], "trap": "各打五十大板和稀泥；只贴“辩证看待”的标签，不给论证"}, {"k": "dc", "name": "对策建议", "crit": "问题导向＋可行性：每条措施都要能对应一个具体问题", "slots": ["靶子（针对什么问题）", "主体（谁来干）", "动作（干什么）", "落点（达到什么效果）", "约束（时限、责任、经费）"], "trap": "只喊“加强领导”“提高认识”，没有动作和主体"}, {"k": "yyw", "name": "应用文", "crit": "文种功能与对象身份：写给谁、为什么写、要他做什么", "slots": ["文种与格式", "对象与目的", "事项（背景—做法—要求）", "语体（平实、得体）"], "trap": "写成工作总结；语气与身份错位；格式缺项"}, {"k": "zw", "name": "大作文", "crit": "主题与价值取向：立意必须落在题干给定的关系上", "slots": ["立意", "分论点（2—3个，递进不并列）", "论据（材料＋现实）", "回扣（结尾收回主题）"], "trap": "分论点平行罗列、论据堆砌不分析、结尾喊口号"}], "theory": [{"name": "矛盾分析法（两点论与重点论）", "use": "材料里成对出现的关系：守与丢、效率与公平、保护与发展。先找主要矛盾，再谈兼顾。", "caution": "先分主次再讲兼顾，不是两头都说一句。"}, {"name": "否定之否定（扬弃）", "use": "第三家企业的“守正创新”就是扬弃：不回到传统，也不全盘现代化，而是在更高层面统一。", "caution": "扬弃不是折中，答题时要写出“保留了什麼、舍弃了什麼”。"}, {"name": "质量互变", "use": "判断阶段：垃圾分类三年、减负常态化、治理由乱到治，量变积累到一定程度才有质变。", "caution": "用来解释“为什么现在才见效”，不能替代具体事实。"}, {"name": "矛盾的普遍性与特殊性", "use": "他山之石能否照搬：古城仿建、数字乡村、社区养老，共性可学、特殊性不可复制。", "caution": "先找共性再找差异，落到“因地制宜”的具体条件上。"}]};
 
+
+/* ===== 切西瓜：分论点 ===== */
+const WM = {"req": ["三瓣要一样大：同一层级、互不包含、拼起来刚好盖住主题", "三瓣要码整齐：一条主线＋统一句式，靠重复词牵引"], "steps": [{"n": "一", "h": "定切口：先决定从哪儿下刀", "body": ["切口＝破题角度。三个角度必须同层级、成体系、不交叉，合起来正好覆盖主题，不多不少。", "判断切口是否合格，只问一句：三瓣里有没有一瓣把另外两瓣包含了。", "拉版最常见的病：努力工作／不怕困难／坚持奋斗——“奋斗”把前两个都吃了，一瓣盖两瓣。"]}, {"n": "二", "h": "码整齐：用一条主线把三瓣串起来", "body": ["码整齐不是字数一样、句式一样，而是有一条主线贯穿，靠一个重复词牵引统一句式。", "最省事的做法：把住一头一尾——前面重复主题词，后面加一个目标。", "例：传承长征精神，青年要树牢理想，坚守信仰。三句同头同尾，读起来才像一组。"]}, {"n": "三", "h": "上科技换词：把笼统的动词往小写、往具体写", "body": ["主题先具象化：传承长征精神→走好新时代长征路，人走路，就有画面。", "中间的动词太笼统就换掉：树牢理想→高擎理想火炬；提高能力→锤炼过硬本领；实干前行→勇于闯关夺隘。", "目标统一成“……之基／之能／之姿”，再贴主题加诗句修饰，形神都有了。"]}], "cuts": [{"scene": "成长类", "trio": [["理想", "管方向"], ["本领", "管本事"], ["实践", "管行动"]]}, {"scene": "治理类", "trio": [["真心", "管立场"], ["耐心", "管态度"], ["细心", "管方法"]]}, {"scene": "攻坚类", "trio": [["担当", "管愿不愿"], ["勇气", "管敢不敢"], ["智慧", "管会不会"]]}, {"scene": "改革类", "trio": [["破", "除旧立新"], ["立", "建章立制"], ["稳", "兜住底线"]]}, {"scene": "民生类", "trio": [["兜底", "保基本"], ["提质", "优服务"], ["共治", "聚合力"]]}, {"scene": "文化类", "trio": [["守正", "护根脉"], ["创新", "换表达"], ["传播", "扩影响"]]}], "demos": [{"topic": "青年传承长征精神", "raw": ["青年要努力工作。", "青年要不怕困难。", "青年要坚持奋斗。"], "cut": ["青年要树牢理想。", "青年要提高能力。", "青年要实干前行。"], "lined": ["传承长征精神，青年要树牢理想，坚守信仰。", "传承长征精神，青年要提高能力，强化担当。", "传承长征精神，青年要实干前行，不断奋斗。"], "final": ["筑牢“革命理想高于天”的信仰之基。", "砥砺“万水千山只等闲”的担当之能。", "永葆“而今迈步从头越”的奋斗之姿。"], "why": "原版病灶是切口重叠（奋斗包含前两者）＋表达笼统；定切口后三瓣各管方向、本事、行动，再用“走好新时代长征路”把人立起来，动词换小、宾语换实，最后统一句式收尾。", "note": "三句合成一段时，前面加“走好新时代长征路，青年当……”，三句并列不递进。"}, {"topic": "基层治理提质增效", "raw": ["要加强领导。", "要完善制度。", "要发动群众。"], "cut": ["以真心站稳立场。", "以耐心做实过程。", "以细心盯住细节。"], "lined": ["治理提质，要以真心站稳立场，把群众小事当大事。", "治理提质，要以耐心做实过程，把反复的事做到底。", "治理提质，要以细心盯住细节，把容易漏的事补上去。"], "final": ["怀“把小事当大事”的真心，站稳为民立场。", "持“一锤接着一锤敲”的耐心，做实治理过程。", "用“于细微处见真章”的细心，补齐服务短板。"], "why": "“加强领导／完善制度／发动群众”三瓣大小不一，且都不是动作；换成真心、耐心、细心，分别管立场、态度、方法，同一层级、互不包含，统一用“以……站稳／做实／盯住”牵引。", "note": "治理类切口最容易写虚，三瓣后面必须各带一个具体动作，否则又回到口号。"}, {"topic": "改革攻坚", "raw": ["要敢于改革。", "要善于改革。", "要稳妥改革。"], "cut": ["以担当破题。", "以勇气闯关。", "以智慧善后。"], "lined": ["改革攻坚，要以担当破题，敢啃硬骨头。", "改革攻坚，要以勇气闯关，敢涉深水区。", "改革攻坚，要以智慧善后，兜住民生底线。"], "final": ["以“明知山有虎”的担当破题，敢啃硬骨头。", "以“狭路相逢勇者胜”的勇气闯关，敢涉深水区。", "以“十个指头弹钢琴”的智慧善后，兜住民生底线。"], "why": "原版“敢于／善于／稳妥”是三个形容词，不是三瓣瓜；换成担当、勇气、智慧，对应愿不愿、敢不敢、会不会，正好覆盖改革攻坚的三个层面，再各接一个具体动作落地。", "note": "攻坚类三瓣必须是“意愿—胆量—能力”，颠倒顺序就变成重复。"}], "tips": ["切之前先问：这三瓣能不能拼成一个完整的主题，中间有没有缝、有没有叠。", "每一瓣都要能单独成段，又要能合成一体；谁都能被谁替代，说明切口错了。", "换词只在三瓣切好之后做，切口不对，词换得再亮也是歪瓜。"]};
+
+function renderWM(){
+
+  const w = WM;
+  let out = '';
+  out += '<div class="wm-req">'+ w.req.map((r,i)=>'<div class="wr-row"><span class="wr-n">'+(i+1)+'</span><p>'+esc(r)+'</p></div>').join('') +'</div>';
+  out += '<ol class="wm-steps">'+ w.steps.map(s=>'<li class="wm-step"><div class="ws-h"><span class="ws-no">'+esc(s.n)+'</span>'+esc(s.h)+'</div><ul class="ws-b">'+s.body.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></li>').join('') +'</ol>';
+  out += '<div class="secbar"><div class="sb-t">切口库：三瓣各管一件事</div><div class="sb-d">同一主题换切口，就换一组分论点。切口之间不能互相包含，这是唯一的硬标准。</div></div>';
+  out += '<div class="tblwrap"><table class="wmtab"><colgroup><col style="width:16%"><col style="width:28%"><col style="width:28%"><col style="width:28%"></colgroup>'
+      + '<thead><tr><th>主题类型</th><th>第一瓣</th><th>第二瓣</th><th>第三瓣</th></tr></thead><tbody>'
+      + w.cuts.map(c=>'<tr><td>'+esc(c.scene)+'</td>'+c.trio.map(t=>'<td><b>'+esc(t[0])+'</b><span class="wt">'+esc(t[1])+'</span></td>').join('')+'</tr>').join('')
+      + '</tbody></table></div>';
+  out += '<div class="secbar"><div class="sb-t">三组完整对照：从拉到夯</div><div class="sb-d">每组四行：拉版 → 定切口 → 码整齐 → 换词收尾。看第二行到第四行，才是“切”出来的。</div></div>';
+  out += w.demos.map(d=>'<div class="wmdemo"><div class="wd-t">'+esc(d.topic)+'</div>'
+      + ['拉版','定切口','码整齐','换词收尾'].map((lab,i)=>{
+          const arr = [d.raw,d.cut,d.lined,d.final][i];
+          return '<div class="wd-row'+(i===3?' on':'')+'"><span class="wd-l">'+lab+'</span><div class="wd-c">'+arr.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div></div>';
+        }).join('')
+      + '<div class="wd-why"><b>这组动了什么：</b>'+esc(d.why)+'</div>'
+      + '<div class="wd-note"><b>落地提醒：</b>'+esc(d.note)+'</div></div>').join('');
+  out += '<div class="wm-more"><b>切之前先问三句：</b>'+ w.tips.map(t=>'<span class="wmp">'+esc(t)+'</span>').join('') +'</div>';
+  out += '<div class="wmtool"><h3>三瓣自检</h3><p class="sub">把你写的三个分论点贴进来，只查三件事：大小是否相当、有没有互相包含、有没有统一牵引。只做提示，不改写。</p>'
+      + '<div class="wm-in"><textarea id="wm1" placeholder="第一瓣：如 青年要树牢理想"></textarea><textarea id="wm2" placeholder="第二瓣"></textarea><textarea id="wm3" placeholder="第三瓣"></textarea></div>'
+      + '<div class="lift-ctrl"><button class="btn btn-sm btn-primary" id="wmBtn">切一刀看看</button><button class="btn btn-sm" id="wmClear">清空</button></div>'
+      + '<div class="toneout" id="wmOut"></div></div>';
+  $('#wmList').innerHTML = out;
+}
+
+function wmCheck(){
+  const a = ['#wm1','#wm2','#wm3'].map(id=>(($(id)&&$(id).value)||'').replace(/[\s，。、；,.;：:]/g,''));
+  if(a.some(x=>!x)){ toast('三个分论点都填上再切'); return; }
+  const res = [];
+  const lens = a.map(x=>x.length);
+  const mx = Math.max(...lens), mn = Math.min(...lens);
+  if(mn>0 && mx/mn>1.7) res.push('<li class="warn">三瓣大小不均：最长 '+mx+' 字、最短 '+mn+' 字，读者会觉得有一瓣是凑的。先把最短那瓣补一个动作或落点。</li>');
+  else res.push('<li class="ok">三瓣长度接近，大小这一关过了。</li>');
+
+  // 去掉三瓣共有的头尾（牵引词），只比“瓣核”，避免统一句式被误判成包含
+  let pre = 0;
+  while(pre < Math.min(...lens) && a[0][pre]===a[1][pre] && a[0][pre]===a[2][pre]) pre++;
+  let suf = 0;
+  while(suf < Math.min(...lens)-pre && a[0][a[0].length-1-suf]===a[1][a[1].length-1-suf] && a[0][a[0].length-1-suf]===a[2][a[2].length-1-suf]) suf++;
+  const cores = a.map(s=>s.slice(pre, s.length-suf));
+  const grams = s=>{ const g=[]; for(let i=0;i<s.length-1;i++) g.push(s.slice(i,i+2)); return g; };
+  let over = false, short = false;
+  cores.forEach((c,i)=>{ if(c.length<5) short = true; });
+  for(let i=0;i<3;i++) for(let j=i+1;j<3;j++){
+    if(cores[i].length<4 || cores[j].length<4) continue;
+    const A = new Set(grams(cores[i])), B = new Set(grams(cores[j]));
+    let inter=0; A.forEach(g=>{ if(B.has(g)) inter++; });
+    const rate = inter / Math.min(A.size,B.size);
+    if(rate>0.5){
+      over = true;
+      res.push('<li class="warn">第 '+(i+1)+' 瓣与第 '+(j+1)+' 瓣的“瓣核”重复约 '+Math.round(rate*100)+'%，两句在说同一件事。换一个不同层级的切口。</li>');
+    }
+  }
+  let same = false;
+  for(let i=0;i<3;i++) for(let j=i+1;j<3;j++){
+    const c1=cores[i].slice(0,2), c2=cores[j].slice(0,2);
+    if(c1 && c2 && c1===c2){ same = true; res.push('<li class="warn">第 '+(i+1)+' 瓣与第 '+(j+1)+' 瓣用的是同一个切口词“'+c1+'”，三瓣只切出两瓣，得换掉一瓣。</li>'); }
+  }
+  if(!over && !same) res.push('<li class="ok">去掉共同的牵引词后，三瓣的瓣核没有明显字面重叠。</li>');
+  if(short) res.push('<li class="warn">有一瓣的瓣核不足 5 个字，可能只是口号；补上“对谁、做什么、到什么程度”。</li>');
+
+  if(a[1].startsWith(a[0].slice(0,2)) && a[2].startsWith(a[0].slice(0,2)))
+    res.push('<li class="ok">三瓣共享起头“'+a[0].slice(0,2)+'”，有统一牵引词，句式这一关立住了。</li>');
+  else if(a[1].startsWith(a[0].slice(0,3)) && a[2].startsWith(a[0].slice(0,3)))
+    res.push('<li class="ok">三瓣共享起头“'+a[0].slice(0,3)+'”，主线统一。</li>');
+  else
+    res.push('<li class="warn">三瓣没有共同起头，读起来像三句散话。前面统一加主题词，后面统一加目标。</li>');
+
+  $('#wmOut').innerHTML = '<ul class="wmres">'+res.join('')+'</ul>'
+    + '<p class="wmtip">机器只查三件机械的事：长短、字面重复、有没有统一起头。语义上的“一瓣包含另一瓣”（如“奋斗”盖住“努力”“不怕困难”）它查不出，要你自己问一句：这三句能不能互相替代。</p>';
+}
+
 function renderBid(){
 
   const d = BID.demo;
@@ -4269,6 +4395,7 @@ function renderFrames(){
         +'<div class="fblock"><h4>交卷前自检</h4><ul>'+f.check.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>'
         +'<div class="fblock"><h4>一句材料的拆解示范</h4><div class="demo"><p>'+esc(f.demo.from)+'</p><p class="to">→ '+esc(f.demo.to)+'</p></div></div>'
         +'<div class="jump" data-act="play" data-play="'+f.k+'">看这套夯法的 10 个详例 →</div>'
+        +(f.k==='zw'?'<div class="jump" data-act="lift">分论点不会切？到「切西瓜法」切三刀 →</div>':'')
       +'</div>'
     +'</section>').join('')+'</div>';
 }
@@ -4536,6 +4663,7 @@ function go(v){
   if(v==='methods') renderMethods();
   if(v==='frame') renderFrames();
   if(v==='bid') renderBid();
+  if(v==='lift') renderWM();
   if(v==='lift'){ renderLift(); renderPlay(); }
   if(v==='practice'){ const ta=$('#answer'); if(ta && document.activeElement!==ta){} }
 }
@@ -4694,6 +4822,11 @@ document.addEventListener('click', e=>{
 });
 
 document.addEventListener('click', e=>{
+  if(e.target.closest('#wmBtn')){ wmCheck(); return; }
+  if(e.target.closest('#wmClear')){
+    ['#wm1','#wm2','#wm3'].forEach(id=>{ const el=$(id); if(el) el.value=''; });
+    const o=$('#wmOut'); if(o) o.innerHTML=''; return;
+  }
   if(e.target.closest('#toneBtn')){
     $('#toneOut').innerHTML = toneCheck($('#toneInput').value);
     return;
